@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -72,7 +72,7 @@
             padding:10px;
         }
         th{
-           background-color:#425a8b;
+            background-color:#425a8b;
             color:white;
         }
         td:nth-child(1),td:nth-child(3){
@@ -87,171 +87,171 @@
     </style>
 </head>
 <body>
-    <div id="contents">
-        <div class="component-group">
-            <div class="component">
-                <div class="listA1 data">
-                    <ul>
-                        <li th:each="a1,index:${listA1}" th:text="${a1.company_name}"></li>
-                    </ul>
-                </div>
-                <div class="listA2 data">
-                    <ul>
-                        <li th:each="a2:${listA2}" th:text="${a2.company_name}"></li>
-                    </ul>
-                </div>
+<div id="contents">
+    <div class="component-group">
+        <div class="component">
+            <div class="listA1 data">
+                <ul>
+                    <li th:each="a1,index:${listA1}" th:text="${a1.company_name}"></li>
+                </ul>
             </div>
-            <img src="/process-arr.gif" style="width:42px; height:40px; position: relative; top:220px;" />
-            <div class="component">
-                <div class="listB1 data">
-                    <ul>
-                        <li th:each="b1:${listB1}" th:text="${b1.company_name}"></li>
-                    </ul>
-                </div>
-            </div>
-            <img src="/process-arr.gif" style="width:42px; height:40px; position: relative; top:220px;" />
-            <div class="component">
-                <div class="listC1 data">
-                    <ul>
-                        <li th:each="c1:${listC1}" th:text="${c1.company_name}"></li>
-                    </ul>
-                </div>
-                <div class="listC2 data">
-                    <ul>
-                        <li th:each="c2:${listC2}" th:text="${c2.company_name}"></li>
-                    </ul>
-                </div>
+            <div class="listA2 data">
+                <ul>
+                    <li th:each="a2:${listA2}" th:text="${a2.company_name}"></li>
+                </ul>
             </div>
         </div>
-        <div class="component-group">
-            <div class="component2">
-                <div class="listFlat data">
-                    <ul>
-                        <li th:each="flat:${listFlat}" th:text="${flat.company_name}"></li>
-                    </ul>
-                </div>
+        <img src="/process-arr.gif" style="width:42px; height:40px; position: relative; top:220px;" />
+        <div class="component">
+            <div class="listB1 data">
+                <ul>
+                    <li th:each="b1:${listB1}" th:text="${b1.company_name}"></li>
+                </ul>
             </div>
         </div>
-        <div class="component-group">
-            <table>
-                <caption>company top6</caption>
-                <colgroup>
-                    <col style="width:25%">
-                    <col style="width:25%">
-                    <col style="width:25%">
-                    <col style="width:25%">
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th scope="col">기업</th>
-                        <th scope="col">규모</th>
-                        <th scope="col">대표상품</th>
-                        <th scope="col">매출액</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="d:${resultList}" class="total">
-                        <td th:text="${d.company_name}">
-                        <td th:text="${d.scale}"></td>
-                        <td th:text="${d.representative_product}"></td>
-                        <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
-                    </tr>
-                    <tr th:each="d:${listA1}" class="a1 off">
-                        <td th:text="${d.company_name}">
-                        <td th:text="${d.scale}"></td>
-                        <td th:text="${d.representative_product}"></td>
-                        <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
-                    </tr>
-                    <tr th:each="d:${listA2}" class="a2 off">
-                        <td th:text="${d.company_name}">
-                        <td th:text="${d.scale}"></td>
-                        <td th:text="${d.representative_product}"></td>
-                        <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
-                    </tr>
-                    <tr th:each="d:${listB1}" class="b1 off">
-                        <td th:text="${d.company_name}">
-                        <td th:text="${d.scale}"></td>
-                        <td th:text="${d.representative_product}"></td>
-                        <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
-                    </tr>
-                    <tr th:each="d:${listC1}" class="c1 off">
-                        <td th:text="${d.company_name}">
-                        <td th:text="${d.scale}"></td>
-                        <td th:text="${d.representative_product}"></td>
-                        <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
-                    </tr>
-                    <tr th:each="d:${listC2}" class="c2 off">
-                        <td th:text="${d.company_name}">
-                        <td th:text="${d.scale}"></td>
-                        <td th:text="${d.representative_product}"></td>
-                        <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
-                    </tr>
-                    <tr th:each="d:${listFlat}" class="flat off">
-                        <td th:text="${d.company_name}">
-                        <td th:text="${d.scale}"></td>
-                        <td th:text="${d.representative_product}"></td>
-                        <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
-                    </tr>
-                </tbody>
-            </table>
+        <img src="/process-arr.gif" style="width:42px; height:40px; position: relative; top:220px;" />
+        <div class="component">
+            <div class="listC1 data">
+                <ul>
+                    <li th:each="c1:${listC1}" th:text="${c1.company_name}"></li>
+                </ul>
+            </div>
+            <div class="listC2 data">
+                <ul>
+                    <li th:each="c2:${listC2}" th:text="${c2.company_name}"></li>
+                </ul>
+            </div>
         </div>
     </div>
+    <div class="component-group">
+        <div class="component2">
+            <div class="listFlat data">
+                <ul>
+                    <li th:each="flat:${listFlat}" th:text="${flat.company_name}"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="component-group">
+        <table>
+            <caption>company top6</caption>
+            <colgroup>
+                <col style="width:25%">
+                <col style="width:25%">
+                <col style="width:25%">
+                <col style="width:25%">
+            </colgroup>
+            <thead>
+            <tr>
+                <th scope="col">기업</th>
+                <th scope="col">규모</th>
+                <th scope="col">대표상품</th>
+                <th scope="col">매출액</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="d:${resultList}" class="total">
+                <td th:text="${d.company_name}">
+                <td th:text="${d.scale}"></td>
+                <td th:text="${d.representative_product}"></td>
+                <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
+            </tr>
+            <tr th:each="d:${listA1}" class="a1 off">
+                <td th:text="${d.company_name}">
+                <td th:text="${d.scale}"></td>
+                <td th:text="${d.representative_product}"></td>
+                <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
+            </tr>
+            <tr th:each="d:${listA2}" class="a2 off">
+                <td th:text="${d.company_name}">
+                <td th:text="${d.scale}"></td>
+                <td th:text="${d.representative_product}"></td>
+                <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
+            </tr>
+            <tr th:each="d:${listB1}" class="b1 off">
+                <td th:text="${d.company_name}">
+                <td th:text="${d.scale}"></td>
+                <td th:text="${d.representative_product}"></td>
+                <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
+            </tr>
+            <tr th:each="d:${listC1}" class="c1 off">
+                <td th:text="${d.company_name}">
+                <td th:text="${d.scale}"></td>
+                <td th:text="${d.representative_product}"></td>
+                <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
+            </tr>
+            <tr th:each="d:${listC2}" class="c2 off">
+                <td th:text="${d.company_name}">
+                <td th:text="${d.scale}"></td>
+                <td th:text="${d.representative_product}"></td>
+                <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
+            </tr>
+            <tr th:each="d:${listFlat}" class="flat off">
+                <td th:text="${d.company_name}">
+                <td th:text="${d.scale}"></td>
+                <td th:text="${d.representative_product}"></td>
+                <td th:text="${#numbers.formatInteger(d.custom_value, 0, 'COMMA')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-    <script th:inline="javascript">
-        /*<![CDATA[*/
+<script th:inline="javascript">
+    /*<![CDATA[*/
 
-        const listA1 = /*[[${listA1}]]*/ 'default';
-        const listA2 = /*[[${listA2}]]*/ 'default';
-        const listB1 = /*[[${listB1}]]*/ 'default';
-        const listC1 = /*[[${listC1}]]*/ 'default';
-        const listC2 = /*[[${listC2}]]*/ 'default';
-        const listFlat = /*[[${listFlat}]]*/ 'default';
+    const listA1 = /*[[${listA1}]]*/ 'default';
+    const listA2 = /*[[${listA2}]]*/ 'default';
+    const listB1 = /*[[${listB1}]]*/ 'default';
+    const listC1 = /*[[${listC1}]]*/ 'default';
+    const listC2 = /*[[${listC2}]]*/ 'default';
+    const listFlat = /*[[${listFlat}]]*/ 'default';
 
-        /*]]>*/
+    /*]]>*/
 
-        document.addEventListener("DOMContentLoaded",function(){
+    document.addEventListener("DOMContentLoaded",function(){
 
-            let dataClass = document.getElementsByClassName("data");
-            let dataClassArr = Array.from(dataClass);
+        let dataClass = document.getElementsByClassName("data");
+        let dataClassArr = Array.from(dataClass);
 
-            dataClassArr.forEach((item,index) => {
-                item.addEventListener('click',function(){
-                    tableShow(this);
-                    dataClassArr.forEach((item) => {
-                      item.style.borderColor='dodgerblue';
-                    })
-                    item.style.borderColor = 'red';
-                });
+        dataClassArr.forEach((item,index) => {
+            item.addEventListener('click',function(){
+                tableShow(this);
+                dataClassArr.forEach((item) => {
+                    item.style.borderColor='dodgerblue';
+                })
+                item.style.borderColor = 'red';
             });
         });
+    });
 
-        function tableShow(item){
-            let tr = Array.from(document.querySelectorAll('tbody tr'));
-            tr.forEach((item,index) => {
-                if(!item.classList.contains('off')){
-                    item.classList.add('off');
-                }
-            });
-            let showTr= '';
-
-            if(item.className.indexOf('A1') > -1){
-                showTr = Array.from(document.querySelectorAll('tbody tr.a1'));
-            } else if(item.className.indexOf('A2') > -1){
-                showTr = Array.from(document.querySelectorAll('tbody tr.a2'));
-            } else if(item.className.indexOf('B1') > -1){
-                showTr = Array.from(document.querySelectorAll('tbody tr.b1'));
-            } else if(item.className.indexOf('C1') > -1){
-                showTr = Array.from(document.querySelectorAll('tbody tr.c1'));
-            } else if(item.className.indexOf('C2') > -1){
-                showTr = Array.from(document.querySelectorAll('tbody tr.c2'));
-            } else if(item.className.indexOf('Flat') > -1){
-                showTr = Array.from(document.querySelectorAll('tbody tr.flat'));
+    function tableShow(item){
+        let tr = Array.from(document.querySelectorAll('tbody tr'));
+        tr.forEach((item,index) => {
+            if(!item.classList.contains('off')){
+                item.classList.add('off');
             }
+        });
+        let showTr= '';
 
-            showTr.forEach((item,index) => {
-                item.classList.toggle('off');
-            });
+        if(item.className.indexOf('A1') > -1){
+            showTr = Array.from(document.querySelectorAll('tbody tr.a1'));
+        } else if(item.className.indexOf('A2') > -1){
+            showTr = Array.from(document.querySelectorAll('tbody tr.a2'));
+        } else if(item.className.indexOf('B1') > -1){
+            showTr = Array.from(document.querySelectorAll('tbody tr.b1'));
+        } else if(item.className.indexOf('C1') > -1){
+            showTr = Array.from(document.querySelectorAll('tbody tr.c1'));
+        } else if(item.className.indexOf('C2') > -1){
+            showTr = Array.from(document.querySelectorAll('tbody tr.c2'));
+        } else if(item.className.indexOf('Flat') > -1){
+            showTr = Array.from(document.querySelectorAll('tbody tr.flat'));
         }
-    </script>
+
+        showTr.forEach((item,index) => {
+            item.classList.toggle('off');
+        });
+    }
+</script>
 </body>
 </html>
