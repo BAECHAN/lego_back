@@ -56,6 +56,9 @@ public class HomeController {
         resultMap.put("listFlat",listFlat);
         resultMap.put("resultList",resultList);
 
+
+        // dddd
+        
         model.addAllAttributes(resultMap);
         return "index.html";
 
