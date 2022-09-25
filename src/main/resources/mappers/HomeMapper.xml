@@ -3,67 +3,7 @@
 
 <mapper namespace="com.example.demo.mapper.HomeMapper">
     <select id="selectList" parameterType="String" resultType="com.example.demo.HomeVO">
-        with temp as (
-        select
-        i.registration_number,
-        i.company_name,
-        i.scale,
-        i.product as representative_product,
-        i.custom_value,
-        g.cluster,
-        g.group,
-        g.final_order
-        from cluster_group g
-        inner join cluster_info i
-        on g.cluster = i.cluster
-        )
-        select * from(
-            select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-            from temp
-            where temp.final_order = 'A-1'
-        ) A1
-        where rnk &lt; 7
-        union
-        select * from(
-                         select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-                         from temp
-                         where temp.final_order = 'A-2'
-                     ) A2
-        where rnk &lt; 7
-        union
-        select * from(
-        select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-        from temp
-        where temp.final_order = 'B-1'
-        ) B1
-        where rnk &lt; 7
-        union
-        select * from(
-                         select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-                         from temp
-                         where temp.final_order = 'B-2'
-                     ) B2
-        where rnk &lt; 7
-        union
-        select * from(
-        select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-        from temp
-        where temp.final_order = 'C-1' and custom_value > 0
-        ) C1
-        where rnk &lt; 7
-        union
-        select * from(
-                         select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-                         from temp
-                         where temp.final_order = 'C-2' and custom_value > 0
-                     ) C2
-        where rnk &lt; 7
-        union
-        select * from(
-        select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-        from temp
-        where temp.final_order = 'Flat' and custom_value > 0
-        ) Flat
-        where rnk &lt; 7;
+        select theme_id,theme_title
+        from product_theme
     </select>
 </mapper>
