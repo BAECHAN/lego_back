@@ -2,8 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.mapper.HomeMapper">
-    <select id="selectList" parameterType="String" resultType="com.example.demo.HomeVO">
-        select theme_id,theme_title
+    <select id="selectListTheme" parameterType="string" resultType="com.example.demo.ThemeVO">
+        select theme_id,theme_title,theme_title_en,thumbnail_link,theme_dscrp
         from product_theme
+        where enabled = 1 and date_released &lt;= NOW();
     </select>
+
+    <select id="selectListItem" parameterType="int" resultType="com.example.demo.ItemVO">
+        select
+            a.product_id,
+            a.title,
+            a.image,
+            a.price,
+            a.pieces,
+            a.ages,
+            a.product_number,
+            a.date_released,
+            b.sale_enabled,
+            b.discounting,
+            b.ea
+        from product_info a
+        inner join product_sale b on a.product_id = b.product_id
+        where a.theme_id = 2;
+    </select>
+
 </mapper>
