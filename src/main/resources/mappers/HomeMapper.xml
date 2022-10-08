@@ -2,68 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.mapper.HomeMapper">
-    <select id="selectList" parameterType="String" resultType="com.example.demo.HomeVO">
-        with temp as (
+    <select id="selectListTheme" parameterType="string" resultType="com.example.demo.ThemeVO">
+        select theme_id,theme_title,theme_title_en,thumbnail_link,theme_dscrp
+        from product_theme
+        where enabled = 1 and date_released &lt;= NOW();
+    </select>
+
+    <select id="selectListProduct" parameterType="int" resultType="com.example.demo.ProductVO">
         select
-        i.registration_number,
-        i.company_name,
-        i.scale,
-        i.product as representative_product,
-        i.custom_value,
-        g.cluster,
-        g.group,
-        g.final_order
-        from cluster_group g
-        inner join cluster_info i
-        on g.cluster = i.cluster
-        )
-        select * from(
-            select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-            from temp
-            where temp.final_order = 'A-1'
-        ) A1
-        where rnk &lt; 7
-        union
-        select * from(
-                         select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-                         from temp
-                         where temp.final_order = 'A-2'
-                     ) A2
-        where rnk &lt; 7
-        union
-        select * from(
-        select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-        from temp
-        where temp.final_order = 'B-1'
-        ) B1
-        where rnk &lt; 7
-        union
-        select * from(
-                         select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-                         from temp
-                         where temp.final_order = 'B-2'
-                     ) B2
-        where rnk &lt; 7
-        union
-        select * from(
-        select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-        from temp
-        where temp.final_order = 'C-1' and custom_value > 0
-        ) C1
-        where rnk &lt; 7
-        union
-        select * from(
-                         select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-                         from temp
-                         where temp.final_order = 'C-2' and custom_value > 0
-                     ) C2
-        where rnk &lt; 7
-        union
-        select * from(
-        select *,rank() over(order by cast(custom_value as unsigned) desc) rnk
-        from temp
-        where temp.final_order = 'Flat' and custom_value > 0
-        ) Flat
-        where rnk &lt; 7;
+            a.product_id,
+            a.title,
+            a.image,
+            a.price,
+            a.pieces,
+            a.ages,
+            a.product_number,
+            a.date_released,
+            b.sale_enabled,
+            b.discounting,
+            b.rate_discount,
+            b.ea
+        from product_info a
+        inner join product_sale b on a.product_id = b.product_id
+        where a.theme_id = #{theme_id}
     </select>
 </mapper>
