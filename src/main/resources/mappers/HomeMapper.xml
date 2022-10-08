@@ -8,7 +8,7 @@
         where enabled = 1 and date_released &lt;= NOW();
     </select>
 
-    <select id="selectListItem" parameterType="int" resultType="com.example.demo.ItemVO">
+    <select id="selectListProduct" parameterType="int" resultType="com.example.demo.ProductVO">
         select
             a.product_id,
             a.title,
@@ -20,10 +20,10 @@
             a.date_released,
             b.sale_enabled,
             b.discounting,
+            b.rate_discount,
             b.ea
         from product_info a
         inner join product_sale b on a.product_id = b.product_id
-        where a.theme_id = 2;
+        where a.theme_id = #{theme_id}
     </select>
-
 </mapper>

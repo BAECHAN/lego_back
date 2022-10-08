@@ -16,7 +16,7 @@ public class HomeService {
         return homeMapper.selectListTheme();
     }
 
-    public List<ItemVO> selectListItem() throws Exception {
-        return homeMapper.selectListItem();
+    public List<ProductVO> selectListProduct(int theme_id) throws Exception {
+        return homeMapper.selectListProduct(theme_id);
     }
 }
