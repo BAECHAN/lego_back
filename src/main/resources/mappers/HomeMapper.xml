@@ -19,11 +19,33 @@
             a.product_number,
             a.date_released,
             b.sale_enabled,
+
             b.discounting,
             b.rate_discount,
             b.ea
         from product_info a
         inner join product_sale b on a.product_id = b.product_id
         where a.theme_id = #{theme_id}
+    </select>
+
+    <select id="selectProductInfo" parameterType="int" resultType="com.example.demo.ProductVO">
+        select
+            a.product_id,
+            a.title,
+            a.image,
+            a.price,
+            a.pieces,
+            a.ages,
+            a.product_number,
+            a.date_released,
+            b.sale_enabled,
+
+            b.discounting,
+            b.rate_discount,
+            b.ea,
+            a.dtl_img_list
+        from product_info a
+                 inner join product_sale b on a.product_id = b.product_id
+        where a.product_number = #{product_number}
     </select>
 </mapper>

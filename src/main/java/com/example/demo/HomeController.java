@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @CrossOrigin(origins="*", allowedHeaders = "*")
@@ -38,5 +40,19 @@ public class HomeController {
         return new ResponseEntity(productList, HttpStatus.OK);
     }
 
+    @GetMapping("/getProductInfo")
+    public ResponseEntity getProductInfo(@RequestParam(value= "product_number", required=true) int product_number) throws Exception {
 
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        ProductVO productInfo = service.selectProductInfo(product_number);
+
+        String[] dtl_img_list;
+        dtl_img_list = productInfo.getDtl_img_list().split(",");
+
+        resultMap.put("productInfo",productInfo);
+        resultMap.put("dtl_img_list",dtl_img_list);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
 }
