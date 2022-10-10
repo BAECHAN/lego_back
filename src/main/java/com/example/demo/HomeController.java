@@ -50,8 +50,8 @@ public class HomeController {
         String[] dtl_img_list;
         dtl_img_list = productInfo.getDtl_img_list().split(",");
 
-        resultMap.put("productInfo",productInfo);
-        resultMap.put("dtl_img_list",dtl_img_list);
+        resultMap.put("product_info",productInfo);
+        resultMap.put("product_img_list",dtl_img_list);
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
