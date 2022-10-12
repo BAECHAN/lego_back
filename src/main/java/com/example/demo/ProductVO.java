@@ -12,6 +12,7 @@ public class ProductVO {
     private String title;
     private String image;
     private int price;
+    private int pieces;
     private int ages;
     private int product_number;
     private Date date_released;
