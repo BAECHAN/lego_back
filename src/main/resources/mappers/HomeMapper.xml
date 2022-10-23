@@ -19,7 +19,6 @@
             a.product_number,
             a.date_released,
             b.sale_enabled,
-
             b.discounting,
             b.rate_discount,
             b.ea
@@ -27,6 +26,7 @@
         inner join product_sale b on a.product_id = b.product_id
         where a.theme_id = #{theme_id}
         order by a.date_released desc
+        limit #{offset} ,#{take}
     </select>
 
     <select id="selectProductInfo" parameterType="int" resultType="com.example.demo.ProductVO">

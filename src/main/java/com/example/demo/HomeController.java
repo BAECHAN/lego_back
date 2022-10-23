@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins="*", allowedHeaders = "*")
 @RestController
@@ -29,15 +30,23 @@ public class HomeController {
     }
 
     @GetMapping("/getProductList")
-    public ResponseEntity getProductList(@RequestParam(value= "theme_id", required=true) int theme_id) throws Exception {
+    public ResponseEntity getProductList(
+            @RequestParam(value= "theme_id", required=true) int theme_id,
+            @RequestParam(value= "page", required=true) int page,
+            @RequestParam(value= "take", required=true) int take
 
-        System.err.println(theme_id);
-        List<ProductVO> productList = service.selectListProduct(theme_id);
-        for(int i=0;i<productList.size();i++) {
-            System.err.println(productList.get(i).getProduct_id());
-            System.err.println(productList.get(i).getTitle());
+    ) throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        int offset = page * take;
+
+        List<ProductVO> productList = service.selectListProduct(theme_id,offset,take);
+        if(productList.size() < take){
+           resultMap.put("isLast",true);
         }
-        return new ResponseEntity(productList, HttpStatus.OK);
+
+        resultMap.put("productList",productList);
+        return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
     @GetMapping("/getProductInfo")
