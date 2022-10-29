@@ -24,7 +24,7 @@
             b.ea
         from product_info a
         inner join product_sale b on a.product_id = b.product_id
-        where a.theme_id = #{theme_id}
+        where a.theme_id = #{theme_id} and b.sale_enabled > 0
         order by a.date_released desc
         limit #{offset} ,#{take}
     </select>
