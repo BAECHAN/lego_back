@@ -25,8 +25,15 @@
         from product_info a
         inner join product_sale b on a.product_id = b.product_id
         where a.theme_id = #{theme_id} and b.sale_enabled > 0
-        order by a.date_released desc
+        order by a.price desc
         limit #{offset} ,#{take}
+    </select>
+
+    <select id="selectListProductCount" parameterType="int" resultType="int">
+        select count(1) as cnt
+        from product_info a
+                 inner join product_sale b on a.product_id = b.product_id
+        where a.theme_id = #{theme_id} and b.sale_enabled > 0
     </select>
 
     <select id="selectProductInfo" parameterType="int" resultType="com.example.demo.ProductVO">

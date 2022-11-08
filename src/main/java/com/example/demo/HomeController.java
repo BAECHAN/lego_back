@@ -41,11 +41,15 @@ public class HomeController {
         int offset = page * take;
 
         List<ProductVO> productList = service.selectListProduct(theme_id,offset,take);
+        int productListCount = service.selectListProductCount(theme_id);
+
         if(productList.size() < take){
            resultMap.put("isLast",true);
         }
 
         resultMap.put("productList",productList);
+        resultMap.put("productListCount",productListCount);
+
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
