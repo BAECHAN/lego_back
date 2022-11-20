@@ -5,7 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins="*", allowedHeaders = "*")
 @RestController
@@ -27,16 +30,57 @@ public class HomeController {
     }
 
     @GetMapping("/getProductList")
-    public ResponseEntity getProductList(@RequestParam(value= "theme_id", required=true) int theme_id) throws Exception {
+    public ResponseEntity getProductList(
+            @RequestParam(value= "theme_id", required=true) int theme_id,
+            @RequestParam(value= "page", required=true) int page,
+            @RequestParam(value= "take", required=true) int take
 
-        System.err.println(theme_id);
-        List<ProductVO> productList = service.selectListProduct(theme_id);
-        for(int i=0;i<productList.size();i++) {
-            System.err.println(productList.get(i).getProduct_id());
-            System.err.println(productList.get(i).getTitle());
+    ) throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        int offset = page * take;
+
+        List<ProductVO> productList = service.selectListProduct(theme_id,offset,take);
+        int productListCount = service.selectListProductCount(theme_id);
+
+        if(productList.size() < take){
+           resultMap.put("isLast",true);
         }
-        return new ResponseEntity(productList, HttpStatus.OK);
+
+        resultMap.put("productList",productList);
+        resultMap.put("productListCount",productListCount);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
+    @GetMapping("/getProductInfo")
+    public ResponseEntity getProductInfo(@RequestParam(value= "product_number", required=true) int product_number) throws Exception {
 
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        ProductVO productInfo = service.selectProductInfo(product_number);
+
+        String[] dtl_img_list;
+        if(productInfo.getDtl_img_list() != null){
+            dtl_img_list = productInfo.getDtl_img_list().split(",");
+            resultMap.put("product_img_list",dtl_img_list);
+        }
+
+        resultMap.put("product_info",productInfo);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/getUserChk")
+    public ResponseEntity getUserChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        System.err.println(paramMap);
+        int isResult = service.selectUserChk(paramMap);
+
+
+        resultMap.put("result",isResult);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
 }

@@ -24,6 +24,55 @@
             b.ea
         from product_info a
         inner join product_sale b on a.product_id = b.product_id
-        where a.theme_id = #{theme_id}
+        where a.theme_id = #{theme_id} and b.sale_enabled > 0
+        order by a.price desc
+        limit #{offset} ,#{take}
     </select>
+
+    <select id="selectListProductCount" parameterType="int" resultType="int">
+        select count(1) as cnt
+        from product_info a
+                 inner join product_sale b on a.product_id = b.product_id
+        where a.theme_id = #{theme_id} and b.sale_enabled > 0
+    </select>
+
+    <select id="selectProductInfo" parameterType="int" resultType="com.example.demo.ProductVO">
+        select
+            a.product_id,
+            a.title,
+            a.image,
+            a.price,
+            a.pieces,
+            a.ages,
+            a.product_number,
+            a.date_released,
+            b.sale_enabled,
+
+            b.discounting,
+            b.rate_discount,
+            b.ea,
+            a.dtl_img_list
+        from product_info a
+                 inner join product_sale b on a.product_id = b.product_id
+        where a.product_number = #{product_number}
+    </select>
+
+    <select id="selectUserChk" parameterType="java.util.HashMap" resultType="int">
+        SELECT COUNT(1) AS CNT
+        FROM USER
+        WHERE EMAIL = #{email}
+        AND ACCOUNT_EXPIRED != TRUE
+        AND ACCOUNT_LOCKED != TRUE
+        AND ACCOUNT_WITHDRAW != TRUE
+    </select>
+
+    <select id="selectUserInfo" parameterType="java.util.HashMap" resultType="com.example.demo.UserVO">
+        SELECT EMAIL, NAME, IMAGE, GRADE
+        FROM USER
+        WHERE EMAIL = #{email}
+          AND ACCOUNT_EXPIRED != TRUE
+        AND ACCOUNT_LOCKED != TRUE
+        AND ACCOUNT_WITHDRAW != TRUE
+    </select>
+
 </mapper>
