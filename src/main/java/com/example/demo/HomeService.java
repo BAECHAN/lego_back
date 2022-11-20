@@ -4,6 +4,7 @@ import com.example.demo.mapper.HomeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -24,5 +25,9 @@ public class HomeService {
     }
     public ProductVO selectProductInfo(int product_number) throws Exception {
         return homeMapper.selectProductInfo(product_number);
+    }
+
+    public int selectUserChk(HashMap<String,Object> paramMap) throws Exception {
+        return homeMapper.selectUserChk(paramMap);
     }
 }

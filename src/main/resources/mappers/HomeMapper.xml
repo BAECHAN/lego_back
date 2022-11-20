@@ -56,4 +56,23 @@
                  inner join product_sale b on a.product_id = b.product_id
         where a.product_number = #{product_number}
     </select>
+
+    <select id="selectUserChk" parameterType="java.util.HashMap" resultType="int">
+        SELECT COUNT(1) AS CNT
+        FROM USER
+        WHERE EMAIL = #{email}
+        AND ACCOUNT_EXPIRED != TRUE
+        AND ACCOUNT_LOCKED != TRUE
+        AND ACCOUNT_WITHDRAW != TRUE
+    </select>
+
+    <select id="selectUserInfo" parameterType="java.util.HashMap" resultType="com.example.demo.UserVO">
+        SELECT EMAIL, NAME, IMAGE, GRADE
+        FROM USER
+        WHERE EMAIL = #{email}
+          AND ACCOUNT_EXPIRED != TRUE
+        AND ACCOUNT_LOCKED != TRUE
+        AND ACCOUNT_WITHDRAW != TRUE
+    </select>
+
 </mapper>
