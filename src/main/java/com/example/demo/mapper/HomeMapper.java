@@ -10,13 +10,15 @@ import java.util.List;
 
 @Repository
 public interface HomeMapper {
-    public List<ThemeVO> selectListTheme() throws Exception;
+    List<ThemeVO> selectListTheme() throws Exception;
 
-    public List<ProductVO> selectListProduct(int theme_id, int offset, int take) throws Exception;
+    List<ProductVO> selectListProduct(int theme_id, int offset, int take) throws Exception;
 
-    public int selectListProductCount(int theme_id) throws Exception;
+    int selectListProductCount(int theme_id) throws Exception;
 
-    public ProductVO selectProductInfo(int product_number) throws Exception;
+    ProductVO selectProductInfo(int product_number) throws Exception;
 
-    public int selectUserChk(HashMap<String, Object> paramMap) throws Exception;
+    int selectEmailChk(HashMap<String, Object> paramMap) throws Exception;
+
+    int createUser(HashMap<String, Object> paramMap) throws Exception;
 }

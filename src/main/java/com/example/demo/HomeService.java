@@ -27,7 +27,11 @@ public class HomeService {
         return homeMapper.selectProductInfo(product_number);
     }
 
-    public int selectUserChk(HashMap<String,Object> paramMap) throws Exception {
-        return homeMapper.selectUserChk(paramMap);
+    public int selectEmailChk(HashMap<String,Object> paramMap) throws Exception {
+        return homeMapper.selectEmailChk(paramMap);
+    }
+
+    public int createUser(HashMap<String, Object> paramMap) throws Exception {
+        return homeMapper.createUser(paramMap);
     }
 }

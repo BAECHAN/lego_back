@@ -71,14 +71,21 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/getUserChk")
-    public ResponseEntity getUserChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
+    @GetMapping("/getEmailChk")
+    public ResponseEntity getEmailChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        System.err.println(paramMap);
-        int isResult = service.selectUserChk(paramMap);
+        int isResult = service.selectEmailChk(paramMap);
+        resultMap.put("result",isResult);
 
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
 
+    @PostMapping("/createUser")
+    public ResponseEntity createUser(@RequestParam HashMap<String,Object> paramMap) throws Exception{
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        int isResult = service.createUser(paramMap);
         resultMap.put("result",isResult);
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
