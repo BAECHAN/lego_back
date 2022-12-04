@@ -20,5 +20,5 @@ public interface HomeMapper {
 
     int selectEmailChk(HashMap<String, Object> paramMap) throws Exception;
 
-    int createUser(HashMap<String, Object> paramMap) throws Exception;
+    int createAccount(HashMap<String, Object> paramMap) throws Exception;
 }

@@ -1,10 +1,13 @@
 package com.example.demo;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,12 +84,18 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @PostMapping("/createUser")
-    public ResponseEntity createUser(@RequestParam HashMap<String,Object> paramMap) throws Exception{
+    @PostMapping("/createAccount")
+    public ResponseEntity createAccount(@RequestBody HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        int isResult = service.createUser(paramMap);
-        resultMap.put("result",isResult);
+        System.out.println("paramMap = " + paramMap);
+
+        int isResult = service.createAccount(paramMap);
+
+        System.out.println(isResult);
+        if(isResult == 1){
+            resultMap.put("result",isResult);
+        }
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }

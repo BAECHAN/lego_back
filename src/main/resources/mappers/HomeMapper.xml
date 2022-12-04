@@ -75,10 +75,10 @@
         AND ACCOUNT_WITHDRAW != TRUE
     </select>
 
-    <insert id="createUser" parameterType="java.util.HashMap">
-        INSERT INTO USER (EMAIL, PASSWORD, NAME, IMAGE, DATE_CREATED, LAST_UPDATED, ACCOUNT_EXPIRED,
+    <insert id="createAccount" parameterType="java.util.HashMap">
+        INSERT INTO USER (EMAIL, PASSWORD, NAME, DATE_CREATED, LAST_UPDATED, ACCOUNT_EXPIRED,
                           ACCOUNT_LOCKED, ACCOUNT_WITHDRAW, DATE_WITHDRAW, GRADE)
-        VALUES (#{email},#{pw},#{nickname},#{image},NOW(),NOW(),FALSE,FALSE,FALSE,NULL,1)
+        VALUES (#{email},#{pw},#{nickname},NOW(),NOW(),FALSE,FALSE,FALSE,NULL,1)
     </insert>
 
 </mapper>

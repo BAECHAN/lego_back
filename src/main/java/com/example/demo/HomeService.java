@@ -31,7 +31,7 @@ public class HomeService {
         return homeMapper.selectEmailChk(paramMap);
     }
 
-    public int createUser(HashMap<String, Object> paramMap) throws Exception {
-        return homeMapper.createUser(paramMap);
+    public int createAccount(HashMap<String, Object> paramMap) throws Exception {
+        return homeMapper.createAccount(paramMap);
     }
 }
