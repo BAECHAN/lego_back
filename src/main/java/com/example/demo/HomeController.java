@@ -99,4 +99,21 @@ public class HomeController {
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
+
+    @GetMapping("/getLoginChk")
+    public ResponseEntity getLoginChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        System.out.println("파람 : "+ paramMap);
+
+        UserVO userInfo = service.selectUserInfo(paramMap);
+
+        if(userInfo != null){
+            resultMap.put("result",userInfo);
+        }
+        System.out.println(resultMap.get("result"));
+        System.out.println(userInfo.getDate_created());
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
 }

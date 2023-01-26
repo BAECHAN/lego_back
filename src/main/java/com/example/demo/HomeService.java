@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.mapper.HomeMapper;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +34,9 @@ public class HomeService {
 
     public int createAccount(HashMap<String, Object> paramMap) throws Exception {
         return homeMapper.createAccount(paramMap);
+    }
+
+    public UserVO selectUserInfo(HashMap<String,Object> paramMap) throws Exception {
+        return homeMapper.selectUserInfo(paramMap);
     }
 }

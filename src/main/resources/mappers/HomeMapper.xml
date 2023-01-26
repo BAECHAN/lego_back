@@ -67,12 +67,20 @@
     </select>
 
     <select id="selectUserInfo" parameterType="java.util.HashMap" resultType="com.example.demo.UserVO">
-        SELECT EMAIL, NAME, IMAGE, GRADE
+        SELECT
+            ID,
+            EMAIL,
+            NAME,
+            IMAGE,
+            DATE_CREATED,
+            ACCOUNT_EXPIRED,
+            ACCOUNT_LOCKED,
+            ACCOUNT_WITHDRAW,
+            DATE_WITHDRAW,
+            GRADE
         FROM USER
-        WHERE EMAIL = #{email}
-          AND ACCOUNT_EXPIRED != TRUE
-        AND ACCOUNT_LOCKED != TRUE
-        AND ACCOUNT_WITHDRAW != TRUE
+        WHERE EMAIL = #{email} AND PASSWORD = #{pw}
+
     </select>
 
     <insert id="createAccount" parameterType="java.util.HashMap">
