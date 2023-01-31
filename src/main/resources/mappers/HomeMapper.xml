@@ -25,7 +25,29 @@
         from product_info a
         inner join product_sale b on a.product_id = b.product_id
         where a.theme_id = #{theme_id} and b.sale_enabled > 0
-        order by a.price desc
+
+        <choose>
+            <when test="sort != ''">
+                <if test="sort.equals('newItem')">
+                    order by a.date_released desc
+                </if>
+                <if test="sort.equals('ascPrice')">
+                    order by a.price asc
+                </if>
+                <if test="sort.equals('descPrice')">
+                    order by a.price desc
+                </if>
+                <if test="sort.equals('descPieces')">
+                    order by a.pieces desc
+                </if>
+                <if test="sort.equals('ascKorean')">
+                    order by a.title asc
+                </if>
+            </when>
+            <otherwise>
+                order by a.date_released desc
+            </otherwise>
+        </choose>
         limit #{offset} ,#{take}
     </select>
 
@@ -79,7 +101,7 @@
             DATE_WITHDRAW,
             GRADE
         FROM USER
-        WHERE EMAIL = #{email} AND PASSWORD = #{pw}
+        WHERE EMAIL = #{email} AND PASSWORD = #{password}
 
     </select>
 

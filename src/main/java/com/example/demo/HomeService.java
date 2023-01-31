@@ -18,8 +18,8 @@ public class HomeService {
         return homeMapper.selectListTheme();
     }
 
-    public List<ProductVO> selectListProduct(int theme_id, int offset, int take) throws Exception {
-        return homeMapper.selectListProduct(theme_id,offset,take);
+    public List<ProductVO> selectListProduct(int theme_id, int offset, int take, String sort) throws Exception {
+        return homeMapper.selectListProduct(theme_id,offset,take,sort);
     }
     public int selectListProductCount(int theme_id) throws Exception {
         return homeMapper.selectListProductCount(theme_id);

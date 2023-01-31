@@ -12,7 +12,7 @@ import java.util.List;
 public interface HomeMapper {
     List<ThemeVO> selectListTheme() throws Exception;
 
-    List<ProductVO> selectListProduct(int theme_id, int offset, int take) throws Exception;
+    List<ProductVO> selectListProduct(int theme_id, int offset, int take, String sort) throws Exception;
 
     int selectListProductCount(int theme_id) throws Exception;
 

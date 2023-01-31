@@ -36,14 +36,19 @@ public class HomeController {
     public ResponseEntity getProductList(
             @RequestParam(value= "theme_id", required=true) int theme_id,
             @RequestParam(value= "page", required=true) int page,
-            @RequestParam(value= "take", required=true) int take
+            @RequestParam(value= "take", required=true) int take,
+            @RequestParam(value = "sort", required = false) String sort
 
     ) throws Exception {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
         int offset = page * take;
 
-        List<ProductVO> productList = service.selectListProduct(theme_id,offset,take);
+        System.err.println(page);
+        System.err.println(take);
+        System.err.println(sort);
+
+        List<ProductVO> productList = service.selectListProduct(theme_id,offset,take,sort);
         int productListCount = service.selectListProductCount(theme_id);
 
         if(productList.size() < take){
