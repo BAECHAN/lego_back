@@ -16,6 +16,8 @@ public interface HomeMapper {
 
     int selectListProductCount(int theme_id) throws Exception;
 
+    List<HashMap> selectListProductFilter(int theme_id) throws Exception;
+
     ProductVO selectProductInfo(int product_number) throws Exception;
 
     int selectEmailChk(HashMap<String, Object> paramMap) throws Exception;

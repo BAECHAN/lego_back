@@ -24,6 +24,10 @@ public class HomeService {
     public int selectListProductCount(int theme_id) throws Exception {
         return homeMapper.selectListProductCount(theme_id);
     }
+
+    public List<HashMap> selectListProductFilter(int theme_id) throws Exception{
+        return homeMapper.selectListProductFilter(theme_id);
+    }
     public ProductVO selectProductInfo(int product_number) throws Exception {
         return homeMapper.selectProductInfo(product_number);
     }
@@ -39,4 +43,6 @@ public class HomeService {
     public UserVO selectUserInfo(HashMap<String,Object> paramMap) throws Exception {
         return homeMapper.selectUserInfo(paramMap);
     }
+
+
 }

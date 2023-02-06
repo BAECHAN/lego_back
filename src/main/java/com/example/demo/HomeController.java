@@ -37,7 +37,8 @@ public class HomeController {
             @RequestParam(value= "theme_id", required=true) int theme_id,
             @RequestParam(value= "page", required=true) int page,
             @RequestParam(value= "take", required=true) int take,
-            @RequestParam(value = "sort", required = false) String sort
+            @RequestParam(value = "sort", required = false) String sort,
+            @RequestParam(value = "filter", required = false) Map<String, String> filter
 
     ) throws Exception {
 
@@ -60,6 +61,19 @@ public class HomeController {
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
+
+    @GetMapping("/getProductFilter")
+    public ResponseEntity getProductFilter(@RequestParam(value= "theme_id", required=true) int theme_id) throws Exception {
+
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        List<HashMap> productFilter = service.selectListProductFilter(theme_id);
+
+        resultMap.put("productFilter",productFilter);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
 
     @GetMapping("/getProductInfo")
     public ResponseEntity getProductInfo(@RequestParam(value= "product_number", required=true) int product_number) throws Exception {

@@ -3,12 +3,14 @@
 
 <mapper namespace="com.example.demo.mapper.HomeMapper">
     <select id="selectListTheme" parameterType="string" resultType="com.example.demo.ThemeVO">
+        <!-- selectListTheme -->
         select theme_id,theme_title,theme_title_en,thumbnail_link,theme_dscrp
         from product_theme
         where enabled = 1 and date_released &lt;= NOW();
     </select>
 
     <select id="selectListProduct" parameterType="int" resultType="com.example.demo.ProductVO">
+        <!-- selectListProduct -->
         select
             a.product_id,
             a.title,
@@ -52,13 +54,52 @@
     </select>
 
     <select id="selectListProductCount" parameterType="int" resultType="int">
+        <!-- selectListProductCount -->
         select count(1) as cnt
         from product_info a
                  inner join product_sale b on a.product_id = b.product_id
         where a.theme_id = #{theme_id} and b.sale_enabled > 0
     </select>
 
+    <select id="selectListProductFilter" parameterType="int" resultType="java.util.HashMap">
+        <!-- selectListProductFilter -->
+        <![CDATA[
+        select
+        a.product_id,
+        case when a.price < 20000 then 1
+        when a.price < 50000 then 2
+        when a.price < 100000 then 3
+        when a.price < 200000 then 4
+        when a.price >= 200000 then 5
+        else 6 end as filter_price,
+
+        case when a.ages > 17 then 1
+        when a.ages > 15 then 2
+        when a.ages > 13 then 3
+        when a.ages > 8 then 4
+        when a.ages > 5 then 5
+        when a.ages > 3 then 6
+        when a.ages > 1.5 then 7
+        else 8 end as filter_ages,
+
+        b.sale_enabled as filter_sale_enabled,
+        b.discounting as filter_discounting,
+        case when a.pieces < 100 then 1
+        when a.pieces < 250 then 2
+        when a.pieces < 500 then 3
+        when a.pieces < 1000 then 4
+        when a.pieces < 2000 then 5
+        when a.pieces >= 2000 then 6
+        else 7 end as filter_pieces
+
+        from product_info a
+        inner join product_sale b on a.product_id = b.product_id
+        where a.theme_id = #{theme_id} and b.sale_enabled > 0
+        ]]>
+    </select>
+
     <select id="selectProductInfo" parameterType="int" resultType="com.example.demo.ProductVO">
+        <!-- selectProductInfo -->
         select
             a.product_id,
             a.title,
@@ -80,6 +121,7 @@
     </select>
 
     <select id="selectEmailChk" parameterType="java.util.HashMap" resultType="int">
+        <!-- selectEmailChk -->
         SELECT COUNT(1) AS CNT
         FROM USER
         WHERE EMAIL = #{email}
@@ -89,6 +131,7 @@
     </select>
 
     <select id="selectUserInfo" parameterType="java.util.HashMap" resultType="com.example.demo.UserVO">
+        <!-- selectUserInfo -->
         SELECT
             ID,
             EMAIL,
@@ -106,6 +149,7 @@
     </select>
 
     <insert id="createAccount" parameterType="java.util.HashMap">
+        <!-- createAccount -->
         INSERT INTO USER (EMAIL, PASSWORD, NAME, DATE_CREATED, LAST_UPDATED, ACCOUNT_EXPIRED,
                           ACCOUNT_LOCKED, ACCOUNT_WITHDRAW, DATE_WITHDRAW, GRADE)
         VALUES (#{email},#{pw},#{nickname},NOW(),NOW(),FALSE,FALSE,FALSE,NULL,1)
