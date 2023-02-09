@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import com.example.demo.mapper.HomeMapper;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +17,11 @@ public class HomeService {
         return homeMapper.selectListTheme();
     }
 
-    public List<ProductVO> selectListProduct(int theme_id, int offset, int take, String sort) throws Exception {
-        return homeMapper.selectListProduct(theme_id,offset,take,sort);
+    public List<ProductVO> selectListProduct(int theme_id, int offset, int take, String sort, HashMap<String, Object> filter) throws Exception {
+        return homeMapper.selectListProduct(theme_id,offset,take,sort,filter);
     }
-    public int selectListProductCount(int theme_id) throws Exception {
-        return homeMapper.selectListProductCount(theme_id);
+    public int selectListProductCount(int theme_id, HashMap<String, Object> filter) throws Exception {
+        return homeMapper.selectListProductCount(theme_id, filter);
     }
 
     public List<HashMap> selectListProductFilter(int theme_id) throws Exception{

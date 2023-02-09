@@ -12,9 +12,9 @@ import java.util.List;
 public interface HomeMapper {
     List<ThemeVO> selectListTheme() throws Exception;
 
-    List<ProductVO> selectListProduct(int theme_id, int offset, int take, String sort) throws Exception;
+    List<ProductVO> selectListProduct(int theme_id, int offset, int take, String sort, HashMap<String, Object> filter) throws Exception;
 
-    int selectListProductCount(int theme_id) throws Exception;
+    int selectListProductCount(int theme_id, HashMap<String, Object> filter) throws Exception;
 
     List<HashMap> selectListProductFilter(int theme_id) throws Exception;
 

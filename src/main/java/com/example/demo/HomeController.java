@@ -32,25 +32,27 @@ public class HomeController {
         return new ResponseEntity(themeList, HttpStatus.OK);
     }
 
-    @GetMapping("/getProductList")
-    public ResponseEntity getProductList(
-            @RequestParam(value= "theme_id", required=true) int theme_id,
-            @RequestParam(value= "page", required=true) int page,
-            @RequestParam(value= "take", required=true) int take,
-            @RequestParam(value = "sort", required = false) String sort,
-            @RequestParam(value = "filter", required = false) Map<String, String> filter
-
-    ) throws Exception {
+    @PostMapping("/getProductList")
+    public ResponseEntity getProductList(@RequestBody HashMap<String,Object> paramMap)throws Exception {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        int theme_id = Integer.parseInt(paramMap.get("theme_id").toString());
+        int page = Integer.parseInt(paramMap.get("page").toString());
+        int take = Integer.parseInt(paramMap.get("take").toString());
+        String sort = paramMap.get("sort").toString();
+        HashMap<String,Object> filter = (HashMap<String, Object>) paramMap.get("filter");
+
         int offset = page * take;
 
+        System.err.println(theme_id);
         System.err.println(page);
         System.err.println(take);
         System.err.println(sort);
+        System.err.println(filter);
 
-        List<ProductVO> productList = service.selectListProduct(theme_id,offset,take,sort);
-        int productListCount = service.selectListProductCount(theme_id);
+        List<ProductVO> productList = service.selectListProduct(theme_id,offset,take,sort,filter);
+        int productListCount = service.selectListProductCount(theme_id,filter);
 
         if(productList.size() < take){
            resultMap.put("isLast",true);
