@@ -26,4 +26,5 @@ public interface HomeMapper {
 
     UserVO selectUserInfo(HashMap<String, Object> paramMap) throws Exception;
 
+    ThemeVO selectThemeByProduct(int product_number) throws Exception;
 }

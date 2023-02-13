@@ -137,4 +137,18 @@ public class HomeController {
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
+
+    @GetMapping("/getThemeByProduct")
+    public ResponseEntity getThemeByProduct(@RequestParam(value= "product_number", required=true) int product_number) throws Exception {
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        ThemeVO themeInfo = service.selectThemeByProduct(product_number);
+        if(themeInfo != null){
+            resultMap.put("result",themeInfo);
+        }
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+
+    }
+
 }

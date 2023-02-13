@@ -44,4 +44,7 @@ public class HomeService {
     }
 
 
+    public ThemeVO selectThemeByProduct(int product_number) throws Exception{
+        return homeMapper.selectThemeByProduct(product_number);
+    }
 }

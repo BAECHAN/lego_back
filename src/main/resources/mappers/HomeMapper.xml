@@ -329,6 +329,7 @@
             b.rate_discount,
             b.ea,
             a.dtl_img_list
+
         from product_info a
                  inner join product_sale b on a.product_id = b.product_id
         where a.product_number = #{product_number}
@@ -368,5 +369,14 @@
                           ACCOUNT_LOCKED, ACCOUNT_WITHDRAW, DATE_WITHDRAW, GRADE)
         VALUES (#{email},#{pw},#{nickname},NOW(),NOW(),FALSE,FALSE,FALSE,NULL,1)
     </insert>
+
+    <select id="selectThemeByProduct" parameterType="int" resultType="com.example.demo.ThemeVO">
+        <!-- selectThemeByProduct -->
+        select a.theme_id, a.theme_title, a.theme_title_en, a.theme_dscrp, a.thumbnail_link
+        from product_theme a
+        inner join product_info b
+        on a.theme_id = b.theme_id
+        where b.product_number = #{product_number}
+    </select>
 
 </mapper>
