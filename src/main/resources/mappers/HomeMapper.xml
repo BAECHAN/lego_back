@@ -379,4 +379,35 @@
         where b.product_number = #{product_number}
     </select>
 
+    <select id="selectListViewedProduct" parameterType="java.util.ArrayList" resultType="com.example.demo.ProductVO">
+        <!-- selectListViewedProduct -->
+        select
+            a.product_id,
+            a.title,
+            a.image,
+            a.price,
+            a.pieces,
+            a.ages,
+            a.product_number,
+            a.date_released,
+            b.sale_enabled,
+            b.discounting,
+            b.rate_discount,
+            b.ea
+        from product_info a
+        inner join product_sale b on a.product_id = b.product_id
+        where b.sale_enabled > 0
+
+        and a.product_number in
+        <choose>
+            <when test="product_number_arr.size > 0">
+                <foreach collection="product_number_arr" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                (0)
+            </otherwise>
+        </choose>
+    </select>
 </mapper>

@@ -5,6 +5,7 @@ import com.example.demo.ThemeVO;
 import com.example.demo.UserVO;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,4 +28,6 @@ public interface HomeMapper {
     UserVO selectUserInfo(HashMap<String, Object> paramMap) throws Exception;
 
     ThemeVO selectThemeByProduct(int product_number) throws Exception;
+
+    List<ProductVO> selectListViewedProduct(ArrayList<Integer> product_number_arr) throws Exception;
 }

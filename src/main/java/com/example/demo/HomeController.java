@@ -148,7 +148,27 @@ public class HomeController {
         }
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
-
     }
 
+    @PostMapping("/getProductViewedList")
+    public ResponseEntity getProductViewedList(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+
+        ArrayList<Integer> product_number_arr = (ArrayList<Integer>) paramMap.get("product_number_arr");
+
+        System.err.println(paramMap);
+        System.err.println(product_number_arr);
+
+        List<ProductVO> productList = service.selectListViewedProduct(product_number_arr);
+
+        System.err.println(productList);
+        System.err.println(productList.size());
+
+        resultMap.put("productList",productList);
+        resultMap.put("productListCount",productList.size());
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
 }

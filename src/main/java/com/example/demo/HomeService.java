@@ -4,6 +4,7 @@ import com.example.demo.mapper.HomeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,5 +47,9 @@ public class HomeService {
 
     public ThemeVO selectThemeByProduct(int product_number) throws Exception{
         return homeMapper.selectThemeByProduct(product_number);
+    }
+
+    public List<ProductVO> selectListViewedProduct(ArrayList<Integer> product_number_arr) throws Exception{
+        return homeMapper.selectListViewedProduct(product_number_arr);
     }
 }
