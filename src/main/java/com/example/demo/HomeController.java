@@ -155,10 +155,9 @@ public class HomeController {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
-
+        System.err.println(paramMap);
         ArrayList<Integer> product_number_arr = (ArrayList<Integer>) paramMap.get("product_number_arr");
 
-        System.err.println(paramMap);
         System.err.println(product_number_arr);
 
         List<ProductVO> productList = service.selectListViewedProduct(product_number_arr);

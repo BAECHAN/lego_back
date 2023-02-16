@@ -409,5 +409,8 @@
                 (0)
             </otherwise>
         </choose>
+        <if test="product_number_arr.size > 0">
+            ORDER BY FIELD(a.product_number, <foreach collection="product_number_arr" item="item" separator=",">#{item}</foreach>)
+        </if>
     </select>
 </mapper>
