@@ -170,4 +170,18 @@ public class HomeController {
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
+
+    @GetMapping("/getProductWishList")
+    public ResponseEntity getProductWishList(@RequestParam(value= "page", required=true) int page,
+                                             @RequestParam(value= "email", required = true) String email) throws Exception {
+
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        List<HashMap> productList = service.selectListWishedProduct(page, email);
+
+        resultMap.put("productList",productList);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
 }

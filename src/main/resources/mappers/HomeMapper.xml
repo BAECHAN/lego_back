@@ -3,7 +3,27 @@
 
 <mapper namespace="com.example.demo.mapper.HomeMapper">
 
-    <sql id="productFilterAnd">
+    <sql id="selectProductInfo">
+        select
+            a.product_id,
+            a.title,
+            a.image,
+            a.price,
+            a.pieces,
+            a.ages,
+            a.product_number,
+            a.date_released,
+            a.dtl_img_list,
+
+            b.sale_enabled,
+            b.discounting,
+            b.rate_discount,
+            b.ea
+
+        from product_info a
+        inner join product_sale b on a.product_id = b.product_id
+    </sql>
+    <sql id="andProductFilter">
         <if test="filter.filter_price1.equals(1) or filter.filter_price2.equals(1) or filter.filter_price3.equals(1)
         or filter.filter_price4.equals(1) or filter.filter_price5.equals(1)">
             and (
@@ -212,6 +232,7 @@
             )
         </if>
     </sql>
+    
 
     <select id="selectListTheme" parameterType="string" resultType="com.example.demo.ThemeVO">
         <!-- selectListTheme -->
@@ -223,23 +244,9 @@
     <select id="selectListProduct" parameterType="Object" resultType="com.example.demo.ProductVO">
         <!-- selectListProduct -->
 
-        select
-            a.product_id,
-            a.title,
-            a.image,
-            a.price,
-            a.pieces,
-            a.ages,
-            a.product_number,
-            a.date_released,
-            b.sale_enabled,
-            b.discounting,
-            b.rate_discount,
-            b.ea
-        from product_info a
-        inner join product_sale b on a.product_id = b.product_id
+        <include refid="selectProductInfo" />
         where a.theme_id = #{theme_id} and b.sale_enabled > 0
-        <include refid="productFilterAnd" />
+        <include refid="andProductFilter" />
 
         <choose>
             <when test="sort != ''">
@@ -272,7 +279,7 @@
         from product_info a
                  inner join product_sale b on a.product_id = b.product_id
         where a.theme_id = #{theme_id} and b.sale_enabled > 0
-        <include refid="productFilterAnd" />
+        <include refid="andProductFilter" />
     </select>
 
     <select id="selectListProductFilter" parameterType="int" resultType="java.util.HashMap">
@@ -314,24 +321,7 @@
 
     <select id="selectProductInfo" parameterType="int" resultType="com.example.demo.ProductVO">
         <!-- selectProductInfo -->
-        select
-            a.product_id,
-            a.title,
-            a.image,
-            a.price,
-            a.pieces,
-            a.ages,
-            a.product_number,
-            a.date_released,
-            b.sale_enabled,
-
-            b.discounting,
-            b.rate_discount,
-            b.ea,
-            a.dtl_img_list
-
-        from product_info a
-                 inner join product_sale b on a.product_id = b.product_id
+        <include refid="selectProductInfo" />
         where a.product_number = #{product_number}
     </select>
 
@@ -381,21 +371,7 @@
 
     <select id="selectListViewedProduct" parameterType="java.util.ArrayList" resultType="com.example.demo.ProductVO">
         <!-- selectListViewedProduct -->
-        select
-            a.product_id,
-            a.title,
-            a.image,
-            a.price,
-            a.pieces,
-            a.ages,
-            a.product_number,
-            a.date_released,
-            b.sale_enabled,
-            b.discounting,
-            b.rate_discount,
-            b.ea
-        from product_info a
-        inner join product_sale b on a.product_id = b.product_id
+        <include refid="selectProductInfo" />
         where b.sale_enabled > 0
 
         and a.product_number in
@@ -412,5 +388,15 @@
         <if test="product_number_arr.size > 0">
             ORDER BY FIELD(a.product_number, <foreach collection="product_number_arr" item="item" separator=",">#{item}</foreach>)
         </if>
+    </select>
+    
+    <select id="selectListWishedProduct" parameterType="string" resultType="com.example.demo.ProductVO">
+        <!-- selectListWishedProduct -->
+        <include refid="selectProductInfo" />
+        inner join user_wish c on a.product_id = c.product_id
+        where b.sale_enabled > 0
+        and c.email = #{email}
+        and c.isWish = 1
+        order by c.date_registed desc
     </select>
 </mapper>

@@ -30,4 +30,6 @@ public interface HomeMapper {
     ThemeVO selectThemeByProduct(int product_number) throws Exception;
 
     List<ProductVO> selectListViewedProduct(ArrayList<Integer> product_number_arr) throws Exception;
+
+    List<HashMap> selectListWishedProduct(int page, String email) throws Exception;
 }

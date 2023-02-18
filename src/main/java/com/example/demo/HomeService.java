@@ -52,4 +52,8 @@ public class HomeService {
     public List<ProductVO> selectListViewedProduct(ArrayList<Integer> product_number_arr) throws Exception{
         return homeMapper.selectListViewedProduct(product_number_arr);
     }
+
+    public List<HashMap> selectListWishedProduct(int page, String email) throws Exception{
+        return homeMapper.selectListWishedProduct(page, email);
+    }
 }
