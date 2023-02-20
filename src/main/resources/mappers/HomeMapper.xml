@@ -353,8 +353,8 @@
 
     </select>
 
-    <insert id="createAccount" parameterType="java.util.HashMap">
-        <!-- createAccount -->
+    <insert id="insertAccount" parameterType="java.util.HashMap">
+        <!-- insertAccount -->
         INSERT INTO USER (EMAIL, PASSWORD, NAME, DATE_CREATED, LAST_UPDATED, ACCOUNT_EXPIRED,
                           ACCOUNT_LOCKED, ACCOUNT_WITHDRAW, DATE_WITHDRAW, GRADE)
         VALUES (#{email},#{pw},#{nickname},NOW(),NOW(),FALSE,FALSE,FALSE,NULL,1)
@@ -396,7 +396,26 @@
         inner join user_wish c on a.product_id = c.product_id
         where b.sale_enabled > 0
         and c.email = #{email}
-        and c.isWish = 1
+        and c.wish = 1
         order by c.date_registed desc
     </select>
+
+    <insert id="insertAddWish" parameterType="java.util.HashMap">
+        <!-- insertAddWish -->
+
+        insert into user_wish(wish_id, email, product_id)
+        values(
+            (	select wish_id
+                from user_wish a
+                where a.email = #{email} and a.product_id = #{product_id}
+            ), #{email}, #{product_id}
+        ) on duplicate key update date_updated = now(), wish = 1;
+    </insert>
+
+    <update id="updateDelWish" parameterType="java.util.HashMap">
+        <!-- updateDelWish -->
+        update user_wish
+        set wish = 0, date_updated = now()
+        where email = #{email} and product_id = #{product_id}
+    </update>
 </mapper>

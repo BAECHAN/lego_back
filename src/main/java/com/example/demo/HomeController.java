@@ -111,7 +111,7 @@ public class HomeController {
 
         System.out.println("paramMap = " + paramMap);
 
-        int isResult = service.createAccount(paramMap);
+        int isResult = service.insertAccount(paramMap);
 
         System.out.println(isResult);
         if(isResult == 1){
@@ -177,11 +177,40 @@ public class HomeController {
 
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        List<HashMap> productList = service.selectListWishedProduct(page, email);
+        List<HashMap> wishList = service.selectListWishedProduct(page, email);
 
-        resultMap.put("productList",productList);
+        resultMap.put("wishList",wishList);
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
+    @PostMapping("/add-wish")
+    public ResponseEntity addWish(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        int result = service.insertAddWish(paramMap);
+
+        if(result == 1){
+            resultMap.put("product_id",paramMap.get("product_id").toString());
+            resultMap.put("wish",true);
+        }
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
+    @PatchMapping("/del-wish")
+    public ResponseEntity delWish(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        int result = service.updateDelWish(paramMap);
+
+        if(result == 1){
+            resultMap.put("product_id",paramMap.get("product_id").toString());
+            resultMap.put("wish",false);
+        }
+
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
 }

@@ -36,8 +36,8 @@ public class HomeService {
         return homeMapper.selectEmailChk(paramMap);
     }
 
-    public int createAccount(HashMap<String, Object> paramMap) throws Exception {
-        return homeMapper.createAccount(paramMap);
+    public int insertAccount(HashMap<String, Object> paramMap) throws Exception {
+        return homeMapper.insertAccount(paramMap);
     }
 
     public UserVO selectUserInfo(HashMap<String,Object> paramMap) throws Exception {
@@ -56,4 +56,13 @@ public class HomeService {
     public List<HashMap> selectListWishedProduct(int page, String email) throws Exception{
         return homeMapper.selectListWishedProduct(page, email);
     }
+
+    public int insertAddWish(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.insertAddWish(paramMap);
+    }
+
+    public int updateDelWish(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.updateDelWish(paramMap);
+    }
+
 }
