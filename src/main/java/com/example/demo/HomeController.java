@@ -21,7 +21,7 @@ public class HomeController {
     @Autowired
     HomeService service;
 
-    @GetMapping("/get-theme-list")
+    @GetMapping("/theme-list")
     public ResponseEntity getThemeList() throws Exception {
 
         List<ThemeVO> themeList = service.selectListTheme();
@@ -32,7 +32,7 @@ public class HomeController {
         return new ResponseEntity(themeList, HttpStatus.OK);
     }
 
-    @PostMapping("/get-product-list")
+    @PostMapping("/product-list")
     public ResponseEntity getProductList(@RequestBody HashMap<String,Object> paramMap)throws Exception {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
@@ -64,7 +64,7 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/get-product-filter")
+    @GetMapping("/product-filter")
     public ResponseEntity getProductFilter(@RequestParam(value= "theme_id", required=true) int theme_id) throws Exception {
 
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
@@ -77,7 +77,7 @@ public class HomeController {
     }
 
 
-    @GetMapping("/get-product-info")
+    @GetMapping("/product-info")
     public ResponseEntity getProductInfo(@RequestParam(value= "product_number", required=true) int product_number) throws Exception {
 
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
@@ -95,7 +95,7 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/get-email-chk")
+    @GetMapping("/email-chk")
     public ResponseEntity getEmailChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
@@ -121,7 +121,7 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/get-login-chk")
+    @GetMapping("/login-chk")
     public ResponseEntity getLoginChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
@@ -138,7 +138,7 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/get-theme-by-product")
+    @GetMapping("/theme-by-product")
     public ResponseEntity getThemeByProduct(@RequestParam(value= "product_number", required=true) int product_number) throws Exception {
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
@@ -150,7 +150,7 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @PostMapping("/get-product-viewed-list")
+    @PostMapping("/product-viewed-list")
     public ResponseEntity getProductViewedList(@RequestBody HashMap<String,Object> paramMap)throws Exception {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
@@ -171,7 +171,7 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/get-product-wish-list")
+    @GetMapping("/product-wish-list")
     public ResponseEntity getProductWishList(@RequestParam(value= "page", required=true) int page,
                                              @RequestParam(value= "email", required = true) String email) throws Exception {
 
