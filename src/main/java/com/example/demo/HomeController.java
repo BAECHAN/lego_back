@@ -206,11 +206,11 @@ public class HomeController {
         int result = service.updateDelWish(paramMap);
 
         if(result == 1){
-            resultMap.put("product_id",paramMap.get("product_id").toString());
+            resultMap.put("product_id",paramMap.get("product_id"));
             resultMap.put("wish",false);
         }
 
-        return new ResponseEntity(result, HttpStatus.OK);
+        return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
     @PostMapping("/get-token")
