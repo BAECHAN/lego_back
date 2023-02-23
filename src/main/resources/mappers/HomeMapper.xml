@@ -418,4 +418,30 @@
         set wish = 0, date_updated = now()
         where email = #{email} and product_id = #{product_id}
     </update>
+
+    <insert id="createToken" parameterType="java.util.HashMap">
+        <!-- createToken -->
+        insert into user_token (email,token)
+            select email,#{token} as token
+            from user
+            where email = #{email}
+            AND ACCOUNT_EXPIRED != TRUE
+            AND ACCOUNT_LOCKED != TRUE
+            AND ACCOUNT_WITHDRAW != TRUE
+        on duplicate key update date_created = now(), token = #{token}
+    </insert>
+
+    <select id="selectTokenChk" parameterType="java.util.HashMap" resultType="com.example.demo.TokenVO">
+        <!-- selectTokenChk -->
+        select email, token, date_created &lt; DATE_SUB(NOW(), INTERVAL 1 hour) as expired
+        from user_token
+        where email = #{email} and token = #{token}
+    </select>
+
+    <update id="updatePassword" parameterType="java.util.HashMap">
+        <!-- updatePassword -->
+        update user
+        set password = #{pw}, LAST_UPDATED = now()
+        where email = #{email}
+    </update>
 </mapper>

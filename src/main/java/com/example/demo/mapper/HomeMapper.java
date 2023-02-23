@@ -2,6 +2,7 @@ package com.example.demo.mapper;
 
 import com.example.demo.ProductVO;
 import com.example.demo.ThemeVO;
+import com.example.demo.TokenVO;
 import com.example.demo.UserVO;
 import org.springframework.stereotype.Repository;
 
@@ -36,4 +37,10 @@ public interface HomeMapper {
     int insertAddWish(HashMap<String, Object> paramMap) throws Exception;
 
     int updateDelWish(HashMap<String, Object> paramMap) throws Exception;
+
+    int createToken(HashMap<String, Object> paramMap) throws Exception;
+
+    TokenVO selectTokenChk(HashMap<String, Object> paramMap) throws Exception;
+
+    int updatePassword(HashMap<String, Object> paramMap) throws Exception;
 }

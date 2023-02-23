@@ -65,4 +65,15 @@ public class HomeService {
         return homeMapper.updateDelWish(paramMap);
     }
 
+    public int createToken(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.createToken(paramMap);
+    }
+
+    public TokenVO selectTokenChk(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.selectTokenChk(paramMap);
+    }
+
+    public int updatePassword(HashMap<String, Object> paramMap) throws Exception {
+        return homeMapper.updatePassword(paramMap);
+    }
 }
