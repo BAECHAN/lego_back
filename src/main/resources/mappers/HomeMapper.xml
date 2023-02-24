@@ -444,4 +444,48 @@
         set password = #{pw}, LAST_UPDATED = now()
         where email = #{email}
     </update>
+
+
+    <select id="selectProductEnable" parameterType="string" resultType="com.example.demo.ProductVO">
+        <!-- selectProductEnable -->
+        <include refid="selectProductInfo" />
+        where b.ea > 0 and a.product_id = #{product_id} and b.sale_enabled = 1
+    </select>
+
+    <insert id="insertAddCart" parameterType="java.util.HashMap">
+        <!-- insertAddCart -->
+
+        insert into user_cart(email, product_id, ea)
+        values(#{email}, #{product_id}, #{order_quantity})
+    </insert>
+
+    <select id="selectListCartProduct" parameterType="string" resultType="com.example.demo.ProductVO">
+        <!-- selectListCartProduct -->
+
+        select
+        a.product_id,
+        a.title,
+        a.image,
+        a.price,
+        a.pieces,
+        a.ages,
+        a.product_number,
+        a.date_released,
+        a.dtl_img_list,
+
+        b.sale_enabled,
+        b.discounting,
+        b.rate_discount,
+        b.ea,
+
+        c.ea as order_quantity
+
+        from product_info a
+        inner join product_sale b on a.product_id = b.product_id
+        inner join user_cart c on a.product_id = c.product_id
+        where b.sale_enabled > 0
+        and c.email = #{email}
+        and c.in_cart = 1
+        order by c.date_registed desc
+    </select>
 </mapper>

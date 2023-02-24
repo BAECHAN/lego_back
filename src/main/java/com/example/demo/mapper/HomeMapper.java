@@ -43,4 +43,10 @@ public interface HomeMapper {
     TokenVO selectTokenChk(HashMap<String, Object> paramMap) throws Exception;
 
     int updatePassword(HashMap<String, Object> paramMap) throws Exception;
+
+    int insertAddCart(HashMap<String, Object> paramMap) throws Exception;
+
+    ProductVO selectProductEnable(int product_id) throws Exception;
+
+    List<HashMap> selectListCartProduct(int page, String email) throws Exception;
 }

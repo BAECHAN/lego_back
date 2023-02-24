@@ -98,8 +98,8 @@ public class HomeController {
     public ResponseEntity getEmailChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        int isResult = service.selectEmailChk(paramMap);
-        resultMap.put("result",isResult);
+        int result = service.selectEmailChk(paramMap);
+        resultMap.put("result",result);
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
@@ -110,11 +110,11 @@ public class HomeController {
 
         System.out.println("paramMap = " + paramMap);
 
-        int isResult = service.insertAccount(paramMap);
+        int result = service.insertAccount(paramMap);
 
-        System.out.println(isResult);
-        if(isResult == 1){
-            resultMap.put("result",isResult);
+        System.out.println(result);
+        if(result == 1){
+            resultMap.put("result",result);
         }
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
@@ -263,12 +263,38 @@ public class HomeController {
 
         System.out.println("paramMap = " + paramMap);
 
-        int isResult = service.updatePassword(paramMap);
+        int result = service.updatePassword(paramMap);
 
-        System.out.println(isResult);
-        if(isResult > 0){
-            resultMap.put("result",isResult);
+        System.out.println(result);
+        if(result > 0){
+            resultMap.put("result",result);
         }
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
+    @PostMapping("/add-cart")
+    public ResponseEntity addCart(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        int result = service.insertAddCart(paramMap);
+
+        if(result > 0){
+            resultMap.put("result",result);
+        }
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/product-cart-list")
+    public ResponseEntity getProductCartList(@RequestParam(value= "page", required=true) int page,
+                                             @RequestParam(value= "email", required = true) String email) throws Exception {
+
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        List<HashMap> cartList = service.selectListCartProduct(page, email);
+
+        resultMap.put("cartList",cartList);
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }

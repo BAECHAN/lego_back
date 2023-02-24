@@ -3,6 +3,7 @@ package com.example.demo;
 import com.example.demo.mapper.HomeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,4 +77,31 @@ public class HomeService {
     public int updatePassword(HashMap<String, Object> paramMap) throws Exception {
         return homeMapper.updatePassword(paramMap);
     }
+
+    public ProductVO selectProductEnable(int product_id) throws Exception {
+        return homeMapper.selectProductEnable(product_id);
+    }
+
+    @Transactional
+    public int insertAddCart(HashMap<String, Object> paramMap) throws Exception {
+        return homeMapper.insertAddCart(paramMap);
+    }
+
+    public List<HashMap> selectListCartProduct(int page, String email) throws Exception{
+        return homeMapper.selectListCartProduct(page, email);
+    }
+
+
+    /** 나중에 주문할 때 상품 개수 체크해서 주문하는거로 */
+//    @Transactional
+//    public int insertAddCart(HashMap<String, Object> paramMap) throws Exception {
+//
+//        ProductVO productInfo = selectProductEnable(Integer.parseInt(paramMap.get("product_id").toString()));
+//
+//        if(productInfo != null){
+//            return homeMapper.insertAddCart(paramMap);
+//        }else{
+//            return 0;
+//        }
+//    }
 }
