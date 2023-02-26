@@ -49,4 +49,6 @@ public interface HomeMapper {
     ProductVO selectProductEnable(int product_id) throws Exception;
 
     List<HashMap> selectListCartProduct(int page, String email) throws Exception;
+
+    int updateDelCart(HashMap<String, Object> paramMap) throws Exception;
 }

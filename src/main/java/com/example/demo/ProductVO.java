@@ -21,5 +21,7 @@ public class ProductVO {
     private int rate_discount;
     private int ea;
     private String dtl_img_list;
+
     private int order_quantity;
+    private int cart_id;
 }

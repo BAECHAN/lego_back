@@ -298,4 +298,21 @@ public class HomeController {
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
+
+    @PatchMapping("/del-cart")
+    public ResponseEntity delCart(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        int result = service.updateDelCart(paramMap);
+
+        if(result == 1){
+            resultMap.put("result",result);
+            resultMap.put("cartId",paramMap.get("cart_id"));
+        }else{
+            resultMap.put("result",0);
+        }
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
 }
