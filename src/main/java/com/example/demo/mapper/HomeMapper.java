@@ -22,11 +22,9 @@ public interface HomeMapper {
 
     ProductVO selectProductInfo(int product_number) throws Exception;
 
-    int selectEmailChk(HashMap<String, Object> paramMap) throws Exception;
-
     int insertAccount(HashMap<String, Object> paramMap) throws Exception;
 
-    UserVO selectUserInfo(HashMap<String, Object> paramMap) throws Exception;
+    UserVO selectLoginChk(HashMap<String, Object> paramMap) throws Exception;
 
     ThemeVO selectThemeByProduct(int product_number) throws Exception;
 
@@ -51,4 +49,8 @@ public interface HomeMapper {
     List<HashMap> selectListCartProduct(int page, String email) throws Exception;
 
     int updateDelCart(HashMap<String, Object> paramMap) throws Exception;
+
+    int updateQuantityCart(HashMap<String, Object> paramMap) throws Exception;
+
+    UserVO selectUserInfo(HashMap<String, Object> paramMap) throws Exception;
 }

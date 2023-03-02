@@ -33,16 +33,12 @@ public class HomeService {
         return homeMapper.selectProductInfo(product_number);
     }
 
-    public int selectEmailChk(HashMap<String,Object> paramMap) throws Exception {
-        return homeMapper.selectEmailChk(paramMap);
-    }
-
     public int insertAccount(HashMap<String, Object> paramMap) throws Exception {
         return homeMapper.insertAccount(paramMap);
     }
 
-    public UserVO selectUserInfo(HashMap<String,Object> paramMap) throws Exception {
-        return homeMapper.selectUserInfo(paramMap);
+    public UserVO selectLoginChk(HashMap<String,Object> paramMap) throws Exception {
+        return homeMapper.selectLoginChk(paramMap);
     }
 
 
@@ -93,6 +89,14 @@ public class HomeService {
 
     public int updateDelCart(HashMap<String, Object> paramMap) throws Exception{
         return homeMapper.updateDelCart(paramMap);
+    }
+
+    public int updateQuantityCart(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.updateQuantityCart(paramMap);
+    }
+
+    public UserVO selectUserInfo(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.selectUserInfo(paramMap);
     }
 
 

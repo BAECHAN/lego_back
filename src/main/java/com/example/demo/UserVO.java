@@ -12,9 +12,9 @@ public class UserVO {
     private String name;
     private String image;
     private Date date_created;
-    private int account_expired;
-    private int account_locked;
-    private int account_withdraw;
+
+    private int account_state;
+
     private Date date_withdraw;
     private int grade;
 }

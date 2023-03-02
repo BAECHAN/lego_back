@@ -3,7 +3,20 @@
 
 <mapper namespace="com.example.demo.mapper.HomeMapper">
 
-    <sql id="selectProductInfo">
+    <sql id="selectUserInfoSQL">
+        SELECT
+            ID,
+            EMAIL,
+            NAME,
+            IMAGE,
+            DATE_CREATED,
+            ACCOUNT_STATE,
+            DATE_WITHDRAW,
+            GRADE
+        FROM USER
+        WHERE EMAIL = #{email}
+    </sql>
+    <sql id="selectProductInfoSQL">
         select
             a.product_id,
             a.title,
@@ -23,7 +36,7 @@
         from product_info a
         inner join product_sale b on a.product_id = b.product_id
     </sql>
-    <sql id="andProductFilter">
+    <sql id="andProductFilterSQL">
         <if test="filter.filter_price1.equals(1) or filter.filter_price2.equals(1) or filter.filter_price3.equals(1)
         or filter.filter_price4.equals(1) or filter.filter_price5.equals(1)">
             and (
@@ -244,9 +257,9 @@
     <select id="selectListProduct" parameterType="Object" resultType="com.example.demo.ProductVO">
         <!-- selectListProduct -->
 
-        <include refid="selectProductInfo" />
+        <include refid="selectProductInfoSQL" />
         where a.theme_id = #{theme_id} and b.sale_enabled > 0
-        <include refid="andProductFilter" />
+        <include refid="andProductFilterSQL" />
 
         <choose>
             <when test="sort != ''">
@@ -279,7 +292,7 @@
         from product_info a
                  inner join product_sale b on a.product_id = b.product_id
         where a.theme_id = #{theme_id} and b.sale_enabled > 0
-        <include refid="andProductFilter" />
+        <include refid="andProductFilterSQL" />
     </select>
 
     <select id="selectListProductFilter" parameterType="int" resultType="java.util.HashMap">
@@ -321,43 +334,20 @@
 
     <select id="selectProductInfo" parameterType="int" resultType="com.example.demo.ProductVO">
         <!-- selectProductInfo -->
-        <include refid="selectProductInfo" />
+        <include refid="selectProductInfoSQL" />
         where a.product_number = #{product_number}
     </select>
 
-    <select id="selectEmailChk" parameterType="java.util.HashMap" resultType="int">
-        <!-- selectEmailChk -->
-        SELECT COUNT(1) AS CNT
-        FROM USER
-        WHERE EMAIL = #{email}
-        AND ACCOUNT_EXPIRED != TRUE
-        AND ACCOUNT_LOCKED != TRUE
-        AND ACCOUNT_WITHDRAW != TRUE
-    </select>
-
-    <select id="selectUserInfo" parameterType="java.util.HashMap" resultType="com.example.demo.UserVO">
-        <!-- selectUserInfo -->
-        SELECT
-            ID,
-            EMAIL,
-            NAME,
-            IMAGE,
-            DATE_CREATED,
-            ACCOUNT_EXPIRED,
-            ACCOUNT_LOCKED,
-            ACCOUNT_WITHDRAW,
-            DATE_WITHDRAW,
-            GRADE
-        FROM USER
-        WHERE EMAIL = #{email} AND PASSWORD = #{password}
-
+    <select id="selectLoginChk" parameterType="java.util.HashMap" resultType="com.example.demo.UserVO">
+        <!-- selectLoginChk -->
+        <include refid="selectUserInfoSQL" />
+        AND PASSWORD = #{password}
     </select>
 
     <insert id="insertAccount" parameterType="java.util.HashMap">
         <!-- insertAccount -->
-        INSERT INTO USER (EMAIL, PASSWORD, NAME, DATE_CREATED, LAST_UPDATED, ACCOUNT_EXPIRED,
-                          ACCOUNT_LOCKED, ACCOUNT_WITHDRAW, DATE_WITHDRAW, GRADE)
-        VALUES (#{email},#{pw},#{nickname},NOW(),NOW(),FALSE,FALSE,FALSE,NULL,1)
+        INSERT INTO USER (EMAIL, PASSWORD, NAME, DATE_CREATED, LAST_UPDATED, ACCOUNT_STATE, DATE_WITHDRAW, GRADE)
+        VALUES (#{email},#{pw},#{nickname},NOW(),NOW(),1,NULL,1)
     </insert>
 
     <select id="selectThemeByProduct" parameterType="int" resultType="com.example.demo.ThemeVO">
@@ -371,7 +361,7 @@
 
     <select id="selectListViewedProduct" parameterType="java.util.ArrayList" resultType="com.example.demo.ProductVO">
         <!-- selectListViewedProduct -->
-        <include refid="selectProductInfo" />
+        <include refid="selectProductInfoSQL" />
         where b.sale_enabled > 0
 
         and a.product_number in
@@ -392,7 +382,7 @@
     
     <select id="selectListWishedProduct" parameterType="string" resultType="com.example.demo.ProductVO">
         <!-- selectListWishedProduct -->
-        <include refid="selectProductInfo" />
+        <include refid="selectProductInfoSQL" />
         inner join user_wish c on a.product_id = c.product_id
         where b.sale_enabled > 0
         and c.email = #{email}
@@ -425,9 +415,6 @@
             select email,#{token} as token
             from user
             where email = #{email}
-            AND ACCOUNT_EXPIRED != TRUE
-            AND ACCOUNT_LOCKED != TRUE
-            AND ACCOUNT_WITHDRAW != TRUE
         on duplicate key update date_created = now(), token = #{token}
     </insert>
 
@@ -448,7 +435,7 @@
 
     <select id="selectProductEnable" parameterType="string" resultType="com.example.demo.ProductVO">
         <!-- selectProductEnable -->
-        <include refid="selectProductInfo" />
+        <include refid="selectProductInfoSQL" />
         where b.ea > 0 and a.product_id = #{product_id} and b.sale_enabled = 1
     </select>
 
@@ -491,8 +478,21 @@
     </select>
 
     <update id="updateDelCart" parameterType="java.util.HashMap">
+        <!-- updateDelCart -->
         update user_cart
         set in_cart = 0, date_updated = now()
         where email = #{email} and in_cart = 1 and cart_id = #{cart_id}
     </update>
+
+    <update id="updateQuantityCart" parameterType="java.util.HashMap">
+        <!-- updateQuantityCart -->
+        update user_cart
+        set ea = #{order_quantity}, date_updated = now()
+        where email = #{email} and in_cart = 1 and cart_id = #{cart_id}
+    </update>
+
+    <select id="selectUserInfo" parameterType="java.util.HashMap" resultType="com.example.demo.UserVO">
+        <!-- selectUserInfo -->
+        <include refid="selectUserInfoSQL" />
+    </select>
 </mapper>

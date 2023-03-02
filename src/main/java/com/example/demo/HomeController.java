@@ -98,8 +98,13 @@ public class HomeController {
     public ResponseEntity getEmailChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        int result = service.selectEmailChk(paramMap);
-        resultMap.put("result",result);
+        UserVO userInfo = service.selectUserInfo(paramMap);
+
+        if(userInfo != null){
+            resultMap.put("result",userInfo.getAccount_state());
+        }else{
+            resultMap.put("result",0);
+        }
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
@@ -122,6 +127,21 @@ public class HomeController {
 
     @GetMapping("/login-chk")
     public ResponseEntity getLoginChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        System.out.println("파람 : "+ paramMap);
+
+        UserVO userInfo = service.selectLoginChk(paramMap);
+
+        if(userInfo != null){
+            resultMap.put("result",userInfo);
+        }
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-user-info")
+    public ResponseEntity getUserInfo(@RequestParam HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
         System.out.println("파람 : "+ paramMap);
@@ -257,7 +277,7 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @PostMapping("/update-password")
+    @PatchMapping("/update-password")
     public ResponseEntity updatePassword(@RequestBody HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
@@ -305,6 +325,23 @@ public class HomeController {
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
         int result = service.updateDelCart(paramMap);
+
+        if(result == 1){
+            resultMap.put("result",result);
+            resultMap.put("cartId",paramMap.get("cart_id"));
+        }else{
+            resultMap.put("result",0);
+        }
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
+    @PatchMapping("/upd-cart")
+    public ResponseEntity updateCart(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        int result = service.updateQuantityCart(paramMap);
 
         if(result == 1){
             resultMap.put("result",result);
