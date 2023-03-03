@@ -352,4 +352,16 @@ public class HomeController {
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
+    @PatchMapping("/upd-account-state")
+    public ResponseEntity updateAccountState(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        int result = service.updateAccountState(paramMap);
+
+        resultMap.put("result",result);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
 }

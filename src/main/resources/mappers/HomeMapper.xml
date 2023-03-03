@@ -495,4 +495,11 @@
         <!-- selectUserInfo -->
         <include refid="selectUserInfoSQL" />
     </select>
+
+    <update id="updateAccountState" parameterType="java.util.HashMap">
+        <!-- updateAccountState -->
+        update user
+        set account_state = 1, last_updated = now()
+        where email = #{email}
+    </update>
 </mapper>

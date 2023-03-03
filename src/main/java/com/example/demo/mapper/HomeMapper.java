@@ -53,4 +53,6 @@ public interface HomeMapper {
     int updateQuantityCart(HashMap<String, Object> paramMap) throws Exception;
 
     UserVO selectUserInfo(HashMap<String, Object> paramMap) throws Exception;
+
+    int updateAccountState(HashMap<String, Object> paramMap) throws Exception;
 }
