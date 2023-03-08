@@ -16,5 +16,5 @@ public class UserVO {
     private int account_state;
 
     private Date date_withdraw;
-    private int grade;
+    private String grade;
 }

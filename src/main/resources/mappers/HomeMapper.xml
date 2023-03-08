@@ -12,7 +12,12 @@
             DATE_CREATED,
             ACCOUNT_STATE,
             DATE_WITHDRAW,
-            GRADE
+            case when GRADE = 1 then 'bronze'
+                 when GRADE = 2 then 'silver'
+                 when GRADE = 3 then 'gold'
+                 when GRADE = 4 then 'vip'
+                 when GRADE = 5 then 'vvip'
+                 else 'blank' end as GRADE
         FROM USER
         WHERE EMAIL = #{email}
     </sql>
