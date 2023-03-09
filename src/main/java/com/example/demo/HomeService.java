@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class HomeService {
@@ -109,6 +110,29 @@ public class HomeService {
 
     public UserVO selectNameChk(HashMap<String, Object> paramMap) throws Exception{
         return homeMapper.selectNameChk(paramMap);
+    }
+
+
+    public String getToken(HashMap<String, Object> paramMap) throws Exception{
+        int randomStrLen = 20;
+        Random random = new Random();
+        StringBuffer randomBuf = new StringBuffer();
+        for (int i = 0; i < randomStrLen; i++) {
+            // Random.nextBoolean() : 랜덤으로 true, false 리턴 (true : 랜덤 소문자 영어, false : 랜덤 숫자)
+            if (random.nextBoolean()) {
+                // 26 : a-z 알파벳 개수
+                // 97 : letter 'a' 아스키코드
+                // (int)(random.nextInt(26)) + 97 : 랜덤 소문자 아스키코드
+                randomBuf.append((char)((int)(random.nextInt(26)) + 97));
+            } else {
+                randomBuf.append(random.nextInt(10));
+            }
+        }
+        String randomStr = randomBuf.toString();
+        System.out.println("[createRandomStrUsingRandomBoolean] randomStr : " + randomStr);
+        // [createRandomStrUsingRandomBoolean] randomStr : iok887yt6sa31m99e4d6
+
+        return randomStr;
     }
 
 

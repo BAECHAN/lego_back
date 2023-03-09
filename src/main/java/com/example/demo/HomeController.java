@@ -176,6 +176,33 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
+    @PostMapping("/password-chk")
+    public ResponseEntity getPasswordChkReturnToken(@RequestBody HashMap<String,Object> paramMap) throws Exception{
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        UserVO userInfo = service.selectLoginChk(paramMap);
+
+        if(userInfo != null){
+            String randomStr = "";
+            randomStr = service.getToken(paramMap);
+
+            paramMap.put("token",randomStr);
+            int result  = service.createToken(paramMap);
+
+            if(result > 0){
+                resultMap.put("result",1);
+                resultMap.put("token", randomStr);
+            }else{
+                resultMap.put("result",-1);
+            }
+
+        }else{
+            resultMap.put("result",0);
+        }
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
     @GetMapping("/get-user-info")
     public ResponseEntity getUserInfo(@RequestParam HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
@@ -274,23 +301,9 @@ public class HomeController {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
-        int randomStrLen = 20;
-        Random random = new Random();
-        StringBuffer randomBuf = new StringBuffer();
-        for (int i = 0; i < randomStrLen; i++) {
-            // Random.nextBoolean() : 랜덤으로 true, false 리턴 (true : 랜덤 소문자 영어, false : 랜덤 숫자)
-            if (random.nextBoolean()) {
-                // 26 : a-z 알파벳 개수
-                // 97 : letter 'a' 아스키코드
-                // (int)(random.nextInt(26)) + 97 : 랜덤 소문자 아스키코드
-                randomBuf.append((char)((int)(random.nextInt(26)) + 97));
-            } else {
-                randomBuf.append(random.nextInt(10));
-            }
-        }
-        String randomStr = randomBuf.toString();
-        System.out.println("[createRandomStrUsingRandomBoolean] randomStr : " + randomStr);
-        // [createRandomStrUsingRandomBoolean] randomStr : iok887yt6sa31m99e4d6
+        String randomStr = "";
+
+        randomStr = service.getToken(paramMap);
 
         paramMap.put("token",randomStr);
         int result  = service.createToken(paramMap);
