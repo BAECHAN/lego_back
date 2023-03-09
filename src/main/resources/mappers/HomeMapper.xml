@@ -19,7 +19,6 @@
                  when GRADE = 5 then 'vvip'
                  else 'blank' end as GRADE
         FROM USER
-        WHERE EMAIL = #{email}
     </sql>
     <sql id="selectProductInfoSQL">
         select
@@ -346,6 +345,7 @@
     <select id="selectLoginChk" parameterType="java.util.HashMap" resultType="com.example.demo.UserVO">
         <!-- selectLoginChk -->
         <include refid="selectUserInfoSQL" />
+        WHERE EMAIL = #{email}
         AND PASSWORD = #{password}
     </select>
 
@@ -499,6 +499,7 @@
     <select id="selectUserInfo" parameterType="java.util.HashMap" resultType="com.example.demo.UserVO">
         <!-- selectUserInfo -->
         <include refid="selectUserInfoSQL" />
+        WHERE EMAIL = #{email}
     </select>
 
     <update id="updateAccountState" parameterType="java.util.HashMap">
@@ -507,4 +508,20 @@
         set account_state = 1, last_updated = now()
         where email = #{email}
     </update>
+
+    <select id="selectNameChk" parameterType="java.util.HashMap" resultType="com.example.demo.UserVO">
+        <!-- selectNameChk -->
+        <include refid="selectUserInfoSQL" />
+        WHERE NAME = #{nickname}
+    </select>
+
+    <update id="updateUserInfo" parameterType="java.util.HashMap">
+        <!-- updateUserInfo -->
+        update user
+        set name = #{nickname}, last_updated = now()
+        where email = #{email}
+    </update>
+
+
+
 </mapper>

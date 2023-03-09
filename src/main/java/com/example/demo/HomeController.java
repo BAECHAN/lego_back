@@ -109,6 +109,42 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
+    @GetMapping("/nickname-chk")
+    public ResponseEntity getNicknameChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        UserVO userInfo = service.selectNameChk(paramMap);
+
+        if(userInfo != null){
+            resultMap.put("result",userInfo.getAccount_state());
+        }else{
+            resultMap.put("result",0);
+        }
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
+    @PostMapping("/upd-nickname")
+    public ResponseEntity updateNicknameAfterCheck(@RequestBody HashMap<String,Object> paramMap) throws Exception{
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        UserVO userInfo = service.selectNameChk(paramMap);
+
+        if(userInfo != null){
+            resultMap.put("result",userInfo.getAccount_state());
+        }else{
+            int isUpdate = service.updateUserInfo(paramMap);
+
+            if(isUpdate > 0){
+                resultMap.put("result",0);
+            }else {
+                resultMap.put("result", -1);
+            }
+        }
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
     @PostMapping("/create-account")
     public ResponseEntity createAccount(@RequestBody HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();

@@ -103,6 +103,14 @@ public class HomeService {
         return homeMapper.updateAccountState(paramMap);
     }
 
+    public int updateUserInfo(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.updateUserInfo(paramMap);
+    }
+
+    public UserVO selectNameChk(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.selectNameChk(paramMap);
+    }
+
 
     /** 나중에 주문할 때 상품 개수 체크해서 주문하는거로 */
 //    @Transactional
