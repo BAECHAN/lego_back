@@ -401,16 +401,30 @@ public class HomeController {
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
-    @PatchMapping("/upd-account-state")
-    public ResponseEntity updateAccountState(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+    @PatchMapping("/wakeup-account")
+    public ResponseEntity updateWakeupAccount(@RequestBody HashMap<String,Object> paramMap)throws Exception {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
-        int result = service.updateAccountState(paramMap);
+        int result = service.updateWakeupAccount(paramMap);
 
         resultMap.put("result",result);
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
+
+    @PatchMapping("/withdraw-account")
+    public ResponseEntity updateWithdrawAccount(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        int result = service.updateWithdrawAccount(paramMap);
+
+        resultMap.put("result",result);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
+
 
 }

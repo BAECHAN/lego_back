@@ -100,8 +100,8 @@ public class HomeService {
         return homeMapper.selectUserInfo(paramMap);
     }
 
-    public int updateAccountState(HashMap<String, Object> paramMap) throws Exception{
-        return homeMapper.updateAccountState(paramMap);
+    public int updateWakeupAccount(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.updateWakeupAccount(paramMap);
     }
 
     public int updateUserInfo(HashMap<String, Object> paramMap) throws Exception{
@@ -133,6 +133,10 @@ public class HomeService {
         // [createRandomStrUsingRandomBoolean] randomStr : iok887yt6sa31m99e4d6
 
         return randomStr;
+    }
+
+    public int updateWithdrawAccount(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.updateWithdrawAccount(paramMap);
     }
 
 

@@ -54,9 +54,11 @@ public interface HomeMapper {
 
     UserVO selectUserInfo(HashMap<String, Object> paramMap) throws Exception;
 
-    int updateAccountState(HashMap<String, Object> paramMap) throws Exception;
+    int updateWakeupAccount(HashMap<String, Object> paramMap) throws Exception;
 
     int updateUserInfo(HashMap<String, Object> paramMap) throws Exception;
 
     UserVO selectNameChk(HashMap<String, Object> paramMap) throws Exception;
+
+    int updateWithdrawAccount(HashMap<String, Object> paramMap) throws Exception;
 }

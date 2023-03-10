@@ -502,8 +502,8 @@
         WHERE EMAIL = #{email}
     </select>
 
-    <update id="updateAccountState" parameterType="java.util.HashMap">
-        <!-- updateAccountState -->
+    <update id="updateWakeupAccount" parameterType="java.util.HashMap">
+        <!-- updateWakeupAccount -->
         update user
         set account_state = 1, last_updated = now()
         where email = #{email}
@@ -522,6 +522,11 @@
         where email = #{email}
     </update>
 
-
+    <update id="updateWithdrawAccount" parameterType="java.util.HashMap">
+        <!-- updateWithdrawAccount -->
+        update user
+        set account_state = 9, last_updated = now(), date_withdraw = now()
+        where email = #{email}
+    </update>
 
 </mapper>
