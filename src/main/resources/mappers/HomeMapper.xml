@@ -529,4 +529,31 @@
         where email = #{email}
     </update>
 
+    <insert id="insertAddShipping" parameterType="java.util.HashMap">
+        <!-- insertAddShipping -->
+
+        INSERT INTO USER_SHIPPING (
+            EMAIL,
+            RECIPIENT,
+            SHIPPING_NAME,
+            TEL_NUMBER,
+            SHIPPING_ZIPCODE,
+            SHIPPING_ADDRESS1,
+            SHIPPING_ADDRESS2,
+            SHIPPING_DEFAULT,
+            DELIVERY_REQUEST,
+            DELIVERY_REQUEST_DIRECT,
+            DATE_REGISTED,
+            DATE_UPDATED,
+            STATE
+        )
+        VALUES (
+                (select email
+                 from user
+                 where email = #{email}
+                 ),#{recipient},#{shippingName},CONCAT(#{telNumberFront},#{telNumberMiddle},#{telNumberBack}),
+                #{shippingZipCode},#{shippingAddress1},#{shippingAddress2},#{shippingDefault},#{deliveryRequest},
+                #{deliveryRequestDirect},NOW(),NOW(),1)
+    </insert>
+
 </mapper>

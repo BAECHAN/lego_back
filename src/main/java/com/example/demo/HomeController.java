@@ -425,6 +425,19 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
+    @PostMapping("/add-shipping")
+    public ResponseEntity addShipping(@RequestBody HashMap<String,Object> paramMap)throws Exception {
 
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        System.err.println(paramMap);
+
+
+        int result = service.insertAddShipping(paramMap);
+
+        resultMap.put("result", result);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
 
 }

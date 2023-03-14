@@ -139,6 +139,13 @@ public class HomeService {
         return homeMapper.updateWithdrawAccount(paramMap);
     }
 
+    public int insertAddShipping(HashMap<String, Object> paramMap) throws Exception{
+
+
+
+        return homeMapper.insertAddShipping(paramMap);
+    }
+
 
     /** 나중에 주문할 때 상품 개수 체크해서 주문하는거로 */
 //    @Transactional

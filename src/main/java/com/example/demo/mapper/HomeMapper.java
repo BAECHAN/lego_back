@@ -61,4 +61,6 @@ public interface HomeMapper {
     UserVO selectNameChk(HashMap<String, Object> paramMap) throws Exception;
 
     int updateWithdrawAccount(HashMap<String, Object> paramMap) throws Exception;
+
+    int insertAddShipping(HashMap<String, Object> paramMap) throws Exception;
 }
