@@ -140,10 +140,11 @@ public class HomeService {
     }
 
     public int insertAddShipping(HashMap<String, Object> paramMap) throws Exception{
-
-
-
         return homeMapper.insertAddShipping(paramMap);
+    }
+
+    public List<ShippingVO> selectListShipping(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.selectListShipping(paramMap);
     }
 
 

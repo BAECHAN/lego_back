@@ -556,4 +556,23 @@
                 #{deliveryRequestDirect},NOW(),NOW(),1)
     </insert>
 
+    <select id="selectListShipping" parameterType="java.util.HashMap" resultType="com.example.demo.ShippingVO">
+        <!-- selectListShipping -->
+
+        select shipping_id,
+               email,
+               recipient,
+               shipping_name,
+               tel_number,
+               shipping_zipcode,
+               shipping_address1,
+               shipping_address2,
+               shipping_default,
+               delivery_request,
+               delivery_request_direct,state
+        from user_shipping
+        where email = #{email} and state in (0,1)
+
+    </select>
+
 </mapper>

@@ -1,9 +1,6 @@
 package com.example.demo.mapper;
 
-import com.example.demo.ProductVO;
-import com.example.demo.ThemeVO;
-import com.example.demo.TokenVO;
-import com.example.demo.UserVO;
+import com.example.demo.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -63,4 +60,6 @@ public interface HomeMapper {
     int updateWithdrawAccount(HashMap<String, Object> paramMap) throws Exception;
 
     int insertAddShipping(HashMap<String, Object> paramMap) throws Exception;
+
+    List<ShippingVO> selectListShipping(HashMap<String, Object> paramMap) throws Exception;
 }

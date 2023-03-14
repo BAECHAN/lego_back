@@ -440,4 +440,14 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
+    @GetMapping("/shipping-list")
+    public ResponseEntity getShippingList(@RequestParam HashMap<String,Object> paramMap) throws Exception{
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        List<ShippingVO> shippingList = service.selectListShipping(paramMap);
+
+        resultMap.put("shippingList",shippingList);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
 }
