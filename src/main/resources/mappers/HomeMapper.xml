@@ -529,8 +529,8 @@
         where email = #{email}
     </update>
 
-    <insert id="insertAddShipping" parameterType="java.util.HashMap">
-        <!-- insertAddShipping -->
+    <insert id="insertShipping" parameterType="java.util.HashMap">
+        <!-- insertShipping -->
 
         INSERT INTO USER_SHIPPING (
             EMAIL,
@@ -574,5 +574,37 @@
         where email = #{email} and state in (0,1)
 
     </select>
+
+    <update id="updateShipping" parameterType="java.util.HashMap">
+        <!-- updateShipping -->
+        update USER_SHIPPING
+        set EMAIL = #{email},
+            RECIPIENT = #{recipient},
+            SHIPPING_NAME = #{shippingName},
+            TEL_NUMBER = CONCAT(#{telNumberFront},#{telNumberMiddle},#{telNumberBack}),
+            SHIPPING_ZIPCODE = #{shippingZipCode},
+            SHIPPING_ADDRESS1 = #{shippingAddress1},
+            SHIPPING_ADDRESS2 = #{shippingAddress2},
+            SHIPPING_DEFAULT = #{shippingDefault},
+            DELIVERY_REQUEST = #{deliveryRequest},
+            DELIVERY_REQUEST_DIRECT = #{deliveryRequestDirect},
+            DATE_UPDATED = NOW()
+        where shipping_id = #{shippingId} and email = #{email}
+    </update>
+
+    <update id="resetShippingDefault" parameterType="java.util.HashMap">
+        <!-- resetShippingDefault -->
+        update USER_SHIPPING
+        set SHIPPING_DEFAULT = 0
+        where email = #{email}
+    </update>
+
+    <update id="updateDelShipping" parameterType="java.util.HashMap">
+        <!-- updateDelShipping -->
+
+        update USER_SHIPPING
+        set state = 9, DATE_UPDATED = NOW()
+        where shipping_id = #{shippingId} and email=#{email}
+    </update>
 
 </mapper>

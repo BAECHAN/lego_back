@@ -425,17 +425,32 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @PostMapping("/add-shipping")
+    @PostMapping("/manage-shipping")
     public ResponseEntity addShipping(@RequestBody HashMap<String,Object> paramMap)throws Exception {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
         System.err.println(paramMap);
 
-
-        int result = service.insertAddShipping(paramMap);
+        int result = service.manageShipping(paramMap);
 
         resultMap.put("result", result);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
+    @PatchMapping("/del-shipping")
+    public ResponseEntity delShipping(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        int result = service.updateDelShipping(paramMap);
+
+        if(result == 1){
+            resultMap.put("result",result);
+        }else{
+            resultMap.put("result",0);
+        }
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }

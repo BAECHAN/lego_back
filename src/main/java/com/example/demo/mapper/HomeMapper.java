@@ -59,7 +59,13 @@ public interface HomeMapper {
 
     int updateWithdrawAccount(HashMap<String, Object> paramMap) throws Exception;
 
-    int insertAddShipping(HashMap<String, Object> paramMap) throws Exception;
+    int insertShipping(HashMap<String, Object> paramMap) throws Exception;
+
+    int updateShipping(HashMap<String, Object> paramMap) throws Exception;;
 
     List<ShippingVO> selectListShipping(HashMap<String, Object> paramMap) throws Exception;
+
+    int resetShippingDefault(HashMap<String, Object> paramMap) throws Exception;
+
+    int updateDelShipping(HashMap<String, Object> paramMap) throws Exception;
 }

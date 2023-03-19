@@ -139,12 +139,32 @@ public class HomeService {
         return homeMapper.updateWithdrawAccount(paramMap);
     }
 
-    public int insertAddShipping(HashMap<String, Object> paramMap) throws Exception{
-        return homeMapper.insertAddShipping(paramMap);
+    @Transactional
+    public int manageShipping(HashMap<String, Object> paramMap) throws Exception{
+
+
+        int isResetShippingDefault = 0;
+        int changeShipping = 0;
+
+        if(paramMap.get("shippingDefault").toString() == "true"){
+            homeMapper.resetShippingDefault(paramMap);
+        }
+
+        if(Integer.parseInt(paramMap.get("shippingId").toString()) == 0){
+            changeShipping = homeMapper.insertShipping(paramMap);
+        }else{
+            changeShipping = homeMapper.updateShipping(paramMap);
+        }
+
+        return changeShipping;
     }
 
     public List<ShippingVO> selectListShipping(HashMap<String, Object> paramMap) throws Exception{
         return homeMapper.selectListShipping(paramMap);
+    }
+
+    public int updateDelShipping(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.updateDelShipping(paramMap);
     }
 
 
