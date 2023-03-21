@@ -68,4 +68,6 @@ public interface HomeMapper {
     int resetShippingDefault(HashMap<String, Object> paramMap) throws Exception;
 
     int updateDelShipping(HashMap<String, Object> paramMap) throws Exception;
+
+    int selectListShippingCount(HashMap<String, Object> paramMap) throws Exception;
 }

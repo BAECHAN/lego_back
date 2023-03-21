@@ -167,6 +167,10 @@ public class HomeService {
         return homeMapper.updateDelShipping(paramMap);
     }
 
+    public int selectListShippingCount(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.selectListShippingCount(paramMap);
+    }
+
 
     /** 나중에 주문할 때 상품 개수 체크해서 주문하는거로 */
 //    @Transactional

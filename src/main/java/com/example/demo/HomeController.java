@@ -459,9 +459,24 @@ public class HomeController {
     public ResponseEntity getShippingList(@RequestParam HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
+        int page = Integer.parseInt(paramMap.get("page").toString());
+        int take = 5;
+        int offset = (page-1) * take;
+
+        paramMap.put("take",take);
+        paramMap.put("offset",offset);
+
         List<ShippingVO> shippingList = service.selectListShipping(paramMap);
+        int shippingListCount = service.selectListShippingCount(paramMap);
+
+        if(shippingList.size() < take || shippingListCount == take * page){
+            resultMap.put("isLastPage",true);
+        }else{
+            resultMap.put("isLastPage",false);
+        }
 
         resultMap.put("shippingList",shippingList);
+        resultMap.put("shippingListCount",shippingListCount);
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }

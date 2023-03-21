@@ -572,7 +572,15 @@
                delivery_request_direct,state
         from user_shipping
         where email = #{email} and state in (0,1)
+        limit #{offset},#{take}
+    </select>
 
+    <select id="selectListShippingCount" parameterType="java.util.HashMap" resultType="int">
+        <!-- selectListShippingCount -->
+
+        select count(1)
+        from user_shipping
+        where email = #{email} and state in (0,1)
     </select>
 
     <update id="updateShipping" parameterType="java.util.HashMap">
