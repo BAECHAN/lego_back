@@ -7,6 +7,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
@@ -477,6 +478,30 @@ public class HomeController {
 
         resultMap.put("shippingList",shippingList);
         resultMap.put("shippingListCount",shippingListCount);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
+    @PostMapping("/upd-user-image")
+    public ResponseEntity updateUserImage(@RequestPart(value="image", required = false) MultipartFile uploadFile,
+                                          @RequestPart(value="email", required = true) String email,
+                                          @RequestPart(value="isDefault", required = true) String isDefault)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        System.err.println(uploadFile);
+        System.err.println(isDefault);
+        System.err.println(email);
+
+        int result = 0;
+
+        if(uploadFile != null && "0".equals(isDefault)){
+            result = service.saveFile(uploadFile, email);
+        }else{
+            result = service.updateDefaultImage(email);
+        }
+
+        resultMap.put("result", result);
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }

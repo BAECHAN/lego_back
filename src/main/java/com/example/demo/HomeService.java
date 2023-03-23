@@ -1,20 +1,27 @@
 package com.example.demo;
 
 import com.example.demo.mapper.HomeMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class HomeService {
 
     @Autowired
     HomeMapper homeMapper;
+
+    @Value("${profile.image.file.dir}")
+    private String fileDir;
 
     public List<ThemeVO> selectListTheme() throws Exception {
         return homeMapper.selectListTheme();
@@ -170,6 +177,38 @@ public class HomeService {
     public int selectListShippingCount(HashMap<String, Object> paramMap) throws Exception{
         return homeMapper.selectListShippingCount(paramMap);
     }
+
+    @Transactional
+    public int saveFile(MultipartFile uploadFile, String email) throws Exception{
+
+        int result = 0;
+
+        String orgFileName = uploadFile.getOriginalFilename();
+        String uuid = UUID.randomUUID().toString();
+
+        String ext = orgFileName.substring(orgFileName.lastIndexOf("."));
+
+        String savedFileName = uuid + ext;
+
+        String savedPath = fileDir + savedFileName;
+
+        try{
+            uploadFile.transferTo(new File(savedPath));
+            result = updateUserImage(email, savedPath);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public int updateDefaultImage(String email) throws Exception{
+        return homeMapper.updateDefaultImage(email);
+    }
+    private int updateUserImage(String email, String savedPath) throws Exception{
+        return homeMapper.updateUserImage(email, savedPath);
+    }
+
+
 
 
     /** 나중에 주문할 때 상품 개수 체크해서 주문하는거로 */

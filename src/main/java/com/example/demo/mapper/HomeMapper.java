@@ -70,4 +70,8 @@ public interface HomeMapper {
     int updateDelShipping(HashMap<String, Object> paramMap) throws Exception;
 
     int selectListShippingCount(HashMap<String, Object> paramMap) throws Exception;
+
+    int updateUserImage(String email, String savedPath) throws Exception;
+
+    int updateDefaultImage(String email) throws Exception;
 }

@@ -615,4 +615,21 @@
         where shipping_id = #{shippingId} and email=#{email}
     </update>
 
+    <update id="updateUserImage" parameterType="string">
+        <!-- updateUserImage -->
+
+        update user
+        set image = #{savedPath}, last_updated = now()
+        where email = #{email}
+    </update>
+
+    <update id="updateDefaultImage" parameterType="string">
+        <!-- updateDefaultImage -->
+
+        update user
+        set image = null, last_updated = now()
+        where email = #{email}
+    </update>
+
+
 </mapper>
