@@ -572,6 +572,7 @@
                delivery_request_direct,state
         from user_shipping
         where email = #{email} and state in (0,1)
+        order by shipping_default desc, priority desc, date_registed asc
         limit #{offset},#{take}
     </select>
 
@@ -612,6 +613,16 @@
 
         update USER_SHIPPING
         set state = 9, DATE_UPDATED = NOW()
+        where shipping_id = #{shippingId} and email=#{email}
+    </update>
+
+    <update id="updateShippingPriority" parameterType="java.util.HashMap">
+        <!-- updateShippingPriority -->
+        <selectKey resultType="int" keyProperty="priority" order="BEFORE">
+            SELECT MAX(priority)+1 FROM USER_SHIPPING
+        </selectKey>
+        update USER_SHIPPING
+        set priority = #{priority}, DATE_UPDATED = NOW()
         where shipping_id = #{shippingId} and email=#{email}
     </update>
 

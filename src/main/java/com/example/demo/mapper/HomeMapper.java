@@ -74,4 +74,6 @@ public interface HomeMapper {
     int updateUserImage(String email, String savedPath) throws Exception;
 
     int updateDefaultImage(String email) throws Exception;
+
+    int updateShippingPriority(HashMap<String, Object> paramMap) throws Exception;
 }

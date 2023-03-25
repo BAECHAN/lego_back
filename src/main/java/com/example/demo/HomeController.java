@@ -456,6 +456,22 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
+    @PatchMapping("/upd-shipping-priority")
+    public ResponseEntity updateShippingPriority(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        int result = service.updateShippingPriority(paramMap);
+
+        if(result == 1){
+            resultMap.put("result",result);
+        }else{
+            resultMap.put("result",0);
+        }
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
     @GetMapping("/shipping-list")
     public ResponseEntity getShippingList(@RequestParam HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
