@@ -41,7 +41,7 @@ public interface HomeMapper {
 
     int insertAddCart(HashMap<String, Object> paramMap) throws Exception;
 
-    ProductVO selectProductEnable(int product_id) throws Exception;
+    int selectProductEnable(ArrayList<Integer> product_id_list) throws Exception;
 
     List<HashMap> selectListCartProduct(int page, String email) throws Exception;
 
@@ -76,4 +76,14 @@ public interface HomeMapper {
     int updateDefaultImage(String email) throws Exception;
 
     int updateShippingPriority(HashMap<String, Object> paramMap) throws Exception;
+
+    int updateShippingDeliveryRequest(HashMap<String, Object> paramMap) throws Exception;
+
+    int insertOrderGroup(HashMap<String, Object> paramMap) throws Exception;
+
+    int insertOrderItem(HashMap<String, Object> paramMap) throws Exception;
+
+    List<OrderVO> selectListOrderItems(String email, int offset, int take) throws Exception;
+
+    int selectCountOrderItems(String email) throws Exception;
 }

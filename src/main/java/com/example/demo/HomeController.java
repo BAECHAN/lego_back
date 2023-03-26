@@ -521,4 +521,44 @@ public class HomeController {
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
+
+    @PostMapping("/add-order")
+    public ResponseEntity addOrder(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        int result = service.saveOrder(paramMap);
+
+        resultMap.put("result",result);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/order-list")
+    public ResponseEntity getOrderList(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        String email = paramMap.get("email").toString();
+        int page = Integer.parseInt(paramMap.get("page").toString());
+        int take = Integer.parseInt(paramMap.get("take").toString());
+
+        int offset = page * take;
+
+        System.err.println(page);
+        System.err.println(take);
+
+        List<OrderVO> orderList = service.selectListOrderItems(email,offset,take);
+        int orderListCount = service.selectCountOrderItems(email);
+
+        if(orderList.size() < take){
+            resultMap.put("isLast",true);
+        }
+
+        resultMap.put("orderList",orderList);
+        resultMap.put("orderListCount",orderListCount);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
 }

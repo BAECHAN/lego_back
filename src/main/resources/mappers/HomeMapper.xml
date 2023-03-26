@@ -438,10 +438,16 @@
     </update>
 
 
-    <select id="selectProductEnable" parameterType="string" resultType="com.example.demo.ProductVO">
+    <select id="selectProductEnable" parameterType="java.util.ArrayList" resultType="int">
         <!-- selectProductEnable -->
-        <include refid="selectProductInfoSQL" />
-        where b.ea > 0 and a.product_id = #{product_id} and b.sale_enabled = 1
+        select count(1)
+        from product_info a
+        inner join product_sale b on a.product_id = b.product_id
+        where b.ea > 0 and b.sale_enabled = 1
+            and a.product_id in
+            <foreach collection="product_id_list" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
     </select>
 
     <insert id="insertAddCart" parameterType="java.util.HashMap">
@@ -642,5 +648,79 @@
         where email = #{email}
     </update>
 
+    <update id="updateShippingDeliveryRequest" parameterType="java.util.HashMap">
+        <!-- updateShippingDeliveryRequest -->
 
+        update user_shipping
+        set delivery_request = #{delivery_request}, delivery_request_direct = #{delivery_request_direct}, date_updated = now()
+        where email = #{email} and shipping_id = #{shipping_id}
+    </update>
+
+    <insert id="insertOrderGroup" parameterType="java.util.HashMap">
+        <!-- insertOrderGroup -->
+        insert into user_order_group (email, shipping_id, state, date_registed, date_updated)
+        values (#{email}, #{shipping_id}, 2, now(), now())
+    </insert>
+
+    <insert id="insertOrderItem" parameterType="java.util.HashMap">
+        <selectKey resultType="int" keyProperty="order_group_id" order="BEFORE">
+            SELECT max(order_group_id) FROM user_order_group where email = #{email}
+        </selectKey>
+
+        <!-- insertOrderItem -->
+        insert into user_order_item (email, product_id, ea, price, discounting, rate_discount, pay_price, date_registed, date_updated, order_group_id)
+        values
+            <foreach collection="cart_info" item="cart"  separator="," >
+                (#{email}, #{cart.product_id}, #{cart.order_quantity}, #{cart.price}, #{cart.discounting}, #{cart.rate_discount},
+
+            <choose>
+                <when test="cart.discounting != 0">
+                    #{cart.order_quantity} * #{cart.price} * (1 - #{cart.rate_discount}/100)
+                </when>
+                <otherwise>
+                    #{cart.order_quantity} * #{cart.price}
+                </otherwise>
+            </choose>
+            , now(),now(), #{order_group_id})
+            </foreach>
+    </insert>
+
+    <select id="selectListOrderItems" parameterType="java.util.HashMap" resultMap="OrderVO">
+        <!-- selectListOrderItems -->
+        select
+            a.order_group_id,
+            a.state,
+            a.date_registed,
+            b.pay_price,
+            b.ea,
+            c.image,
+            d.recipient,
+            d.tel_number,
+            d.shipping_address1,
+            d.shipping_address2,
+            d.delivery_request,
+            d.delivery_request_direct
+
+        from user_order_group a
+             inner join user_order_item b
+                        on a.order_group_id = b.order_group_id
+             inner join product_info c
+                        on b.product_id = c.product_id
+             inner join user_shipping d
+                        on a.shipping_id = d.shipping_id
+
+        where a.email = #{email}
+
+        order by a.date_registed desc
+        limit #{offset} ,#{take}
+    </select>
+
+    <select id="selectCountOrderItems" parameterType="java.util.HashMap" resultMap="int">
+        <!-- selectCountOrderItems -->
+        select count(1)
+        from user_order_group a
+        inner join user_order_item b
+        on a.order_group_id = b.order_group_id
+        where a.email = #{email}
+    </select>
 </mapper>
