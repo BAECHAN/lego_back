@@ -81,8 +81,8 @@ public class HomeService {
         return homeMapper.updatePassword(paramMap);
     }
 
-    public int selectProductEnable(ArrayList<Integer> product_id_list) throws Exception {
-        return homeMapper.selectProductEnable(product_id_list);
+    public int selectProductEnable(ArrayList<HashMap<String, Object>> cart_info_list) throws Exception {
+        return homeMapper.selectProductEnable(cart_info_list);
     }
 
     @Transactional
@@ -97,6 +97,15 @@ public class HomeService {
     public int updateDelCart(HashMap<String, Object> paramMap) throws Exception {
         return homeMapper.updateDelCart(paramMap);
     }
+
+    public int updateDelCarts(HashMap<String, Object> paramMap) throws Exception {
+        return homeMapper.updateDelCarts(paramMap);
+    }
+
+    public int updateRollbackCarts(HashMap<String, Object> paramMap) throws Exception {
+        return homeMapper.updateRollbackCarts(paramMap);
+    }
+
 
     public int updateQuantityCart(HashMap<String, Object> paramMap) throws Exception {
         return homeMapper.updateQuantityCart(paramMap);
@@ -222,23 +231,20 @@ public class HomeService {
         String deliveryRequestDirect = paramMap.get("delivery_request_direct").toString();
         ArrayList<HashMap<String, Object>> cartInfo = (ArrayList<HashMap<String, Object>>) paramMap.get("cart_info");
 
-        int[] productIdInCart = new int[cartInfo.size()];
-        ArrayList<Integer> productListInCart = new ArrayList<>();
-
         System.err.println(email);
         System.err.println(shippingId);
         System.err.println(deliveryRequest);
         System.err.println(deliveryRequestDirect);
         System.err.println(cartInfo);
 
-        for (int i = 0; i < cartInfo.size(); i++) {
-            productListInCart.add(Integer.parseInt(cartInfo.get(i).get("product_id").toString()));
-            System.err.println(cartInfo.get(i));
-        }
+        System.err.println(cartInfo);
 
-        System.err.println(productListInCart);
+        int countAbleProduct = selectProductEnable(cartInfo);
 
-        int countAbleProduct = selectProductEnable(productListInCart);
+        System.err.println(cartInfo.size());
+        System.err.println(countAbleProduct);
+        System.err.println(cartInfo.size() == countAbleProduct);
+
 
         // 1. 판매가 불가능한 상품이 있는지 확인합니다.
         if (cartInfo.size() == countAbleProduct) {
@@ -264,26 +270,48 @@ public class HomeService {
                     if(isInsertOrderItem > 0){
                         System.err.println("상품별 주문 정보가 등록되었습니다.");
 
-                        // 5. 장바구니에 있던 주문된 상품들은 장바구니에서 제외
+                        // 5. 장바구니에 있던 주문된 상품들은 장바구니에서 제외합니다.
+                        int isUpdateDelCarts = updateDelCarts(paramMap);
 
-                        System.out.println("완료됨");
+                        if(isUpdateDelCarts > 0){
+                            System.err.println("주문완료 된 상품들은 장바구니에서 제외되었습니다.");
 
-                        return 1;
+                            // 6. 상품 재고 ea를 수정합니다.
+                            int isProductCommit = updateSubQuantityProduct(cartInfo);
 
+                            if(isProductCommit > 0){
+                                System.err.println("주문완료 된 상품들의 상품 재고를 수정하였습니다.");
+
+                                updateNoStockProduct(cartInfo);
+
+                                System.out.println("완료됨");
+                                return 1;
+                            }else{
+                                return 905;
+                            }
+                        }else{
+                            return 904;
+                        }
                     }else{
                         return 903;
                     }
                 }else{
                     return 902;
                 }
-
             } else {
                 return 901;
             }
-
         } else {
             return 900;
         }
+    }
+
+    private int updateNoStockProduct(ArrayList<HashMap<String, Object>> product_quantity_arr) throws Exception{
+        return homeMapper.updateNoStockProduct(product_quantity_arr);
+    }
+
+    private int updateRollbackNoStockProduct(ArrayList<HashMap<String, Object>> product_quantity_arr) throws Exception{
+        return homeMapper.updateRollbackNoStockProduct(product_quantity_arr);
     }
 
     public int updateShippingDeliveryRequest(HashMap<String, Object> paramMap) throws Exception {
@@ -305,4 +333,66 @@ public class HomeService {
     public List<OrderVO> selectListOrderItems(String email, int offset, int take) throws Exception{
         return homeMapper.selectListOrderItems(email,offset,take);
     }
+
+    public int updateOrderRefund(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.updateOrderRefund(paramMap);
+    }
+
+    @Transactional
+    public int orderRefund(HashMap<String, Object> paramMap) throws Exception {
+        int isRefund = updateOrderRefund(paramMap);
+
+        // 1. 환불요청
+        if(isRefund > 0){
+            // 2. 주문에 대한 상품 정보 가져오기
+
+            ArrayList<HashMap<String,Object>> orderQuantityByProduct = new ArrayList<>();
+
+            orderQuantityByProduct = selectListOrderQuantity(paramMap);
+
+            if(orderQuantityByProduct.size() > 0){
+                System.err.println(orderQuantityByProduct);
+
+                // 3. 주문 상품에 대한 rollback
+                int isProductRollback = updateAddQuantityProduct(orderQuantityByProduct);
+
+                if(isProductRollback > 0){
+                    System.err.println("주문 상품에 대한 rollback 완료");
+                    // 4. 장바구니에 대한 rollback
+                    paramMap.put("cart_info",orderQuantityByProduct);
+
+                    int isCartRollback = updateRollbackCarts(paramMap);
+
+                    if(isCartRollback > 0){
+                        System.err.println("장바구니 rollback 완료");
+                        updateRollbackNoStockProduct(orderQuantityByProduct);
+                        System.err.println("성공적");
+                        return 1;
+                    }else{
+                        return 909;
+                    }
+                }else{
+                    return 908;
+                }
+            }else{
+                return 907;
+            }
+        }else{
+            return 906;
+        }
+    }
+
+    public int updateAddQuantityProduct(ArrayList<HashMap<String, Object>> product_quantity_arr) throws Exception{
+        return homeMapper.updateAddQuantityProduct(product_quantity_arr);
+    }
+
+    public int updateSubQuantityProduct(ArrayList<HashMap<String, Object>> product_quantity_arr) throws Exception{
+        return homeMapper.updateSubQuantityProduct(product_quantity_arr);
+    }
+
+    public ArrayList<HashMap<String,Object>> selectListOrderQuantity(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.selectListOrderQuantity(paramMap);
+    }
+
+
 }

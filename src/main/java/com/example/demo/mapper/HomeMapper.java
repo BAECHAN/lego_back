@@ -41,11 +41,13 @@ public interface HomeMapper {
 
     int insertAddCart(HashMap<String, Object> paramMap) throws Exception;
 
-    int selectProductEnable(ArrayList<Integer> product_id_list) throws Exception;
+    int selectProductEnable(ArrayList<HashMap<String, Object>> cart_info_list) throws Exception;
 
     List<HashMap> selectListCartProduct(int page, String email) throws Exception;
 
     int updateDelCart(HashMap<String, Object> paramMap) throws Exception;
+    int updateDelCarts(HashMap<String, Object> paramMap) throws Exception;
+    int updateRollbackCarts(HashMap<String, Object> paramMap) throws Exception;
 
     int updateQuantityCart(HashMap<String, Object> paramMap) throws Exception;
 
@@ -86,4 +88,15 @@ public interface HomeMapper {
     List<OrderVO> selectListOrderItems(String email, int offset, int take) throws Exception;
 
     int selectCountOrderItems(String email) throws Exception;
+
+    int updateOrderRefund(HashMap<String, Object> paramMap) throws Exception;
+
+    int updateAddQuantityProduct(ArrayList<HashMap<String, Object>> product_quantity_arr) throws Exception;
+    int updateSubQuantityProduct(ArrayList<HashMap<String, Object>> product_quantity_arr) throws Exception;
+
+    ArrayList<HashMap<String,Object>> selectListOrderQuantity(HashMap<String, Object> paramMap) throws Exception;
+
+    int updateNoStockProduct(ArrayList<HashMap<String, Object>> product_quantity_arr) throws Exception;
+
+    int updateRollbackNoStockProduct(ArrayList<HashMap<String, Object>> product_quantity_arr) throws Exception;
 }

@@ -531,11 +531,15 @@ public class HomeController {
 
         resultMap.put("result",result);
 
+        if(result != 1){
+            System.err.println("결제 데이터 반입 에러 번호 : " + result);
+        }
+
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
     @GetMapping("/order-list")
-    public ResponseEntity getOrderList(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+    public ResponseEntity getOrderList(@RequestParam HashMap<String,Object> paramMap)throws Exception {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
@@ -557,6 +561,24 @@ public class HomeController {
 
         resultMap.put("orderList",orderList);
         resultMap.put("orderListCount",orderListCount);
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
+    @PatchMapping("/upd-order-refund")
+    public ResponseEntity updateOrderRefund(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+
+
+        int result = service.orderRefund(paramMap);
+
+        if(result > 0){
+            resultMap.put("result",result);
+        }else{
+            resultMap.put("result",0);
+        }
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
