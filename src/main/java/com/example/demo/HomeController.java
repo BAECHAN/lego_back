@@ -431,8 +431,6 @@ public class HomeController {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
-        System.err.println(paramMap);
-
         int result = service.manageShipping(paramMap);
 
         resultMap.put("result", result);
