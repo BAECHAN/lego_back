@@ -142,7 +142,6 @@ public class HomeController {
 
         int result = service.insertAccount(paramMap);
 
-        System.out.println(result);
         if(result == 1){
             resultMap.put("result",result);
         }
