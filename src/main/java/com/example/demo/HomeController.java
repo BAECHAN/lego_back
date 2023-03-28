@@ -140,8 +140,6 @@ public class HomeController {
     public ResponseEntity createAccount(@RequestBody HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        System.out.println("paramMap = " + paramMap);
-
         int result = service.insertAccount(paramMap);
 
         System.out.println(result);
