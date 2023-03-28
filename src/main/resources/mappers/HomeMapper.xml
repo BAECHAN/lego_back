@@ -2,77 +2,811 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.mapper.HomeMapper">
+
+    <sql id="selectUserInfoSQL">
+        SELECT
+            ID,
+            EMAIL,
+            NAME,
+            IMAGE,
+            DATE_CREATED,
+            ACCOUNT_STATE,
+            DATE_WITHDRAW,
+            case when GRADE = 1 then 'bronze'
+                 when GRADE = 2 then 'silver'
+                 when GRADE = 3 then 'gold'
+                 when GRADE = 4 then 'vip'
+                 when GRADE = 5 then 'vvip'
+                 else 'blank' end as GRADE
+        FROM USER
+    </sql>
+    <sql id="selectProductInfoSQL">
+        select
+            a.product_id,
+            a.title,
+            a.image,
+            a.price,
+            a.pieces,
+            a.ages,
+            a.product_number,
+            a.date_released,
+            a.dtl_img_list,
+
+            b.sale_enabled,
+            b.discounting,
+            b.rate_discount,
+            b.ea
+
+        from product_info a
+        inner join product_sale b on a.product_id = b.product_id
+    </sql>
+    <sql id="andProductFilterSQL">
+        <if test="filter.filter_price1.equals(1) or filter.filter_price2.equals(1) or filter.filter_price3.equals(1)
+        or filter.filter_price4.equals(1) or filter.filter_price5.equals(1)">
+            and (
+
+                <if test="filter.filter_price1.equals(1)">
+                    (a.price &gt;= 0 and a.price &lt; 20000)
+                </if>
+
+                <if test="filter.filter_price1.equals(1) and (filter.filter_price2.equals(1) or filter.filter_price3.equals(1)
+                or filter.filter_price4.equals(1) or filter.filter_price5.equals(1))">
+                or
+                </if>
+
+                <if test="filter.filter_price2.equals(1)">
+                    (a.price &gt;= 20000 and a.price &lt; 50000)
+                </if>
+
+                <if test="filter.filter_price2.equals(1) and (filter.filter_price3.equals(1)
+                    or filter.filter_price4.equals(1) or filter.filter_price5.equals(1))">
+                    or
+                </if>
+
+                <if test="filter.filter_price3.equals(1)">
+                    (a.price &gt;= 50000 and a.price &lt; 100000)
+                </if>
+
+                <if test="filter.filter_price3.equals(1) and (filter.filter_price4.equals(1) or filter.filter_price5.equals(1))">
+                    or
+                </if>
+
+                <if test="filter.filter_price4.equals(1)">
+                    (a.price &gt;= 100000 and a.price &lt; 200000)
+                </if>
+
+
+                <if test="filter.filter_price4.equals(1) and filter.filter_price5.equals(1)">
+                    or
+                </if>
+
+                <if test="filter.filter_price5.equals(1)">
+                    a.price &gt;= 200000
+                </if>
+            )
+        </if>
+
+        <if test="filter.filter_ages7.equals(1) or filter.filter_ages6.equals(1) or filter.filter_ages5.equals(1)
+        or filter.filter_ages4.equals(1) or filter.filter_ages3.equals(1) or filter.filter_ages2.equals(1) or filter.filter_ages1.equals(1)">
+            and (
+            <if test="filter.filter_ages7.equals(1)">
+                (a.ages &lt;= 3 and a.ages &gt; 1.5)
+            </if>
+
+            <if test="filter.filter_ages7.equals(1) and (filter.filter_ages6.equals(1) or filter.filter_ages5.equals(1)
+                or filter.filter_ages4.equals(1) or filter.filter_ages3.equals(1) or filter.filter_ages2.equals(1) or filter.filter_ages1.equals(1))">
+                or
+            </if>
+
+            <if test="filter.filter_ages6.equals(1)">
+                (a.ages &lt;= 5 and a.ages &gt; 3)
+            </if>
+
+            <if test="filter.filter_ages6.equals(1) and (filter.filter_ages5.equals(1) or filter.filter_ages4.equals(1)
+            or filter.filter_ages3.equals(1) or filter.filter_ages2.equals(1) or filter.filter_ages1.equals(1))">
+                or
+            </if>
+
+            <if test="filter.filter_ages5.equals(1)">
+                (a.ages &lt;= 8 and a.ages &gt; 5)
+            </if>
+
+            <if test="filter.filter_ages5.equals(1) and (filter.filter_ages4.equals(1)
+            or filter.filter_ages3.equals(1) or filter.filter_ages2.equals(1) or filter.filter_ages1.equals(1))">
+                or
+            </if>
+
+            <if test="filter.filter_ages4.equals(1)">
+                (a.ages &lt;= 13 and a.ages &gt; 8)
+            </if>
+
+            <if test="filter.filter_ages4.equals(1) and (filter.filter_ages3.equals(1) or filter.filter_ages2.equals(1) or filter.filter_ages1.equals(1))">
+                or
+            </if>
+
+            <if test="filter.filter_ages3.equals(1)">
+                (a.ages &lt;= 15 and a.ages &gt; 13)
+            </if>
+
+            <if test="filter.filter_ages3.equals(1) and (filter.filter_ages2.equals(1) or filter.filter_ages1.equals(1))">
+                or
+            </if>
+
+            <if test="filter.filter_ages2.equals(1)">
+                (a.ages &lt;= 17 and a.ages &gt; 15)
+            </if>
+
+            <if test="filter.filter_ages2.equals(1) and filter.filter_ages1.equals(1)">
+                or
+            </if>
+
+            <if test="filter.filter_ages1.equals(1)">
+                a.ages &gt; 17
+            </if>
+            )
+
+        </if>
+
+
+        <if test="filter.filter_sale_enabled1.equals(1) or filter.filter_sale_enabled2.equals(1) or filter.filter_sale_enabled3.equals(1)
+        or filter.filter_sale_enabled4.equals(1)">
+            and (
+                <if test="filter.filter_sale_enabled1.equals(1)">
+                    b.sale_enabled = 0
+                </if>
+
+                <if test="filter.filter_sale_enabled1.equals(1) and (filter.filter_sale_enabled2.equals(1)
+                 or filter.filter_sale_enabled3.equals(1) or filter.filter_sale_enabled4.equals(1))">
+                    or
+                </if>
+
+                <if test="filter.filter_sale_enabled2.equals(1)">
+                    b.sale_enabled = 1
+                </if>
+
+                <if test="filter.filter_sale_enabled2.equals(1) and (filter.filter_sale_enabled3.equals(1) or filter.filter_sale_enabled4.equals(1))">
+                    or
+                </if>
+
+                <if test="filter.filter_sale_enabled3.equals(1)">
+                    b.sale_enabled = 8
+                </if>
+
+                <if test="filter.filter_sale_enabled3.equals(1) and filter.filter_sale_enabled4.equals(1)">
+                    or
+                </if>
+
+                <if test="filter.filter_sale_enabled4.equals(1)">
+                    b.sale_enabled = 9
+                </if>
+            )
+        </if>
+
+        <if test="filter.filter_discounting1.equals(1) or filter.filter_discounting2.equals(1)">
+            and (
+                <if test="filter.filter_discounting1.equals(1)">
+                    b.discounting = 0
+                </if>
+
+                <if test="filter.filter_discounting1.equals(1) and filter.filter_discounting2.equals(1)">
+                    or
+                </if>
+
+                <if test="filter.filter_discounting2.equals(1)">
+                    b.discounting = 1
+                </if>
+            )
+        </if>
+
+        <if test="filter.filter_pieces1.equals(1) or filter.filter_pieces2.equals(1) or filter.filter_pieces3.equals(1)
+        or filter.filter_pieces4.equals(1) or filter.filter_pieces5.equals(1) or filter.filter_pieces6.equals(1)">
+            and (
+                <if test="filter.filter_pieces1.equals(1)">
+                    (a.pieces &gt;= 1 and a.pieces &lt; 100)
+                </if>
+
+                <if test="filter.filter_pieces1.equals(1) and (filter.filter_pieces2.equals(1) or filter.filter_pieces3.equals(1)
+                    or filter.filter_pieces4.equals(1) or filter.filter_pieces5.equals(1) or filter.filter_pieces6.equals(1))">
+                    or
+                </if>
+
+                <if test="filter.filter_pieces2.equals(1)">
+                    (a.pieces &gt;= 100 and a.pieces &lt; 250)
+                </if>
+
+                <if test="filter.filter_pieces2.equals(1) and (filter.filter_pieces3.equals(1)
+                        or filter.filter_pieces4.equals(1) or filter.filter_pieces5.equals(1) or filter.filter_pieces6.equals(1))">
+                    or
+                </if>
+
+                <if test="filter.filter_pieces3.equals(1)">
+                    (a.pieces &gt;= 250 and a.pieces &lt; 500)
+                </if>
+
+                <if test="filter.filter_pieces3.equals(1) and (filter.filter_pieces4.equals(1)
+                            or filter.filter_pieces5.equals(1) or filter.filter_pieces6.equals(1))">
+                    or
+                </if>
+                <if test="filter.filter_pieces4.equals(1)">
+                    (a.pieces &gt;= 500 and a.pieces &lt; 1000)
+                </if>
+
+                <if test="filter.filter_pieces4.equals(1) and (filter.filter_pieces5.equals(1) or filter.filter_pieces6.equals(1))">
+                    or
+                </if>
+
+                <if test="filter.filter_pieces5.equals(1)">
+                    (a.pieces &gt;= 1000 and a.pieces &lt; 2000)
+                </if>
+
+                <if test="filter.filter_pieces5.equals(1) and filter.filter_pieces6.equals(1)">
+                    or
+                </if>
+
+                <if test="filter.filter_pieces6.equals(1)">
+                    a.pieces &gt; 2000
+                </if>
+            )
+        </if>
+    </sql>
+    
+
     <select id="selectListTheme" parameterType="string" resultType="com.example.demo.ThemeVO">
+        <!-- selectListTheme -->
         select theme_id,theme_title,theme_title_en,thumbnail_link,theme_dscrp
         from product_theme
         where enabled = 1 and date_released &lt;= NOW();
     </select>
 
-    <select id="selectListProduct" parameterType="int" resultType="com.example.demo.ProductVO">
-        select
-            a.product_id,
-            a.title,
-            a.image,
-            a.price,
-            a.pieces,
-            a.ages,
-            a.product_number,
-            a.date_released,
-            b.sale_enabled,
-            b.discounting,
-            b.rate_discount,
-            b.ea
-        from product_info a
-        inner join product_sale b on a.product_id = b.product_id
+    <select id="selectListProduct" parameterType="Object" resultType="com.example.demo.ProductVO">
+        <!-- selectListProduct -->
+
+        <include refid="selectProductInfoSQL" />
         where a.theme_id = #{theme_id} and b.sale_enabled > 0
-        order by a.price desc
+        <include refid="andProductFilterSQL" />
+
+        <choose>
+            <when test="sort != ''">
+                <if test="sort.equals('newItem')">
+                    order by a.date_released desc
+                </if>
+                <if test="sort.equals('ascPrice')">
+                    order by a.price asc
+                </if>
+                <if test="sort.equals('descPrice')">
+                    order by a.price desc
+                </if>
+                <if test="sort.equals('descPieces')">
+                    order by a.pieces desc
+                </if>
+                <if test="sort.equals('ascKorean')">
+                    order by a.title asc
+                </if>
+            </when>
+            <otherwise>
+                order by a.date_released desc
+            </otherwise>
+        </choose>
         limit #{offset} ,#{take}
     </select>
 
     <select id="selectListProductCount" parameterType="int" resultType="int">
+        <!-- selectListProductCount -->
         select count(1) as cnt
         from product_info a
                  inner join product_sale b on a.product_id = b.product_id
         where a.theme_id = #{theme_id} and b.sale_enabled > 0
+        <include refid="andProductFilterSQL" />
+    </select>
+
+    <select id="selectListProductFilter" parameterType="int" resultType="java.util.HashMap">
+        <!-- selectListProductFilter -->
+
+        select
+        a.product_id,
+        case when a.price &lt; 20000 then 1
+        when a.price &lt; 50000 then 2
+        when a.price &lt; 100000 then 3
+        when a.price &lt; 200000 then 4
+        when a.price &gt;= 200000 then 5
+        else 6 end as filter_price,
+
+        case when a.ages > 17 then 1
+        when a.ages &lt;= 17 and a.ages > 15 then 2
+        when a.ages &lt;= 15 and a.ages > 13 then 3
+        when a.ages &lt;= 13 and a.ages > 8 then 4
+        when a.ages &lt;= 8 and a.ages > 5 then 5
+        when a.ages &lt;= 5 and a.ages > 3 then 6
+        when a.ages &lt;= 3 and a.ages > 1.5 then 7
+        else 8 end as filter_ages,
+
+        b.sale_enabled as filter_sale_enabled,
+        b.discounting as filter_discounting,
+        case when a.pieces &lt; 100 then 1
+        when a.pieces &lt; 250 then 2
+        when a.pieces &lt; 500 then 3
+        when a.pieces &lt; 1000 then 4
+        when a.pieces &lt; 2000 then 5
+        when a.pieces >= 2000 then 6
+        else 7 end as filter_pieces
+
+        from product_info a
+        inner join product_sale b on a.product_id = b.product_id
+        where a.theme_id = #{theme_id} and b.sale_enabled > 0
+
     </select>
 
     <select id="selectProductInfo" parameterType="int" resultType="com.example.demo.ProductVO">
-        select
-            a.product_id,
-            a.title,
-            a.image,
-            a.price,
-            a.pieces,
-            a.ages,
-            a.product_number,
-            a.date_released,
-            b.sale_enabled,
-
-            b.discounting,
-            b.rate_discount,
-            b.ea,
-            a.dtl_img_list
-        from product_info a
-                 inner join product_sale b on a.product_id = b.product_id
+        <!-- selectProductInfo -->
+        <include refid="selectProductInfoSQL" />
         where a.product_number = #{product_number}
     </select>
 
-    <select id="selectUserChk" parameterType="java.util.HashMap" resultType="int">
-        SELECT COUNT(1) AS CNT
-        FROM USER
+    <select id="selectLoginChk" parameterType="java.util.HashMap" resultType="com.example.demo.UserVO">
+        <!-- selectLoginChk -->
+        <include refid="selectUserInfoSQL" />
         WHERE EMAIL = #{email}
-        AND ACCOUNT_EXPIRED != TRUE
-        AND ACCOUNT_LOCKED != TRUE
-        AND ACCOUNT_WITHDRAW != TRUE
+        AND PASSWORD = #{password}
     </select>
+
+    <insert id="insertAccount" parameterType="java.util.HashMap">
+        <!-- insertAccount -->
+        INSERT INTO USER (EMAIL, PASSWORD, NAME, DATE_CREATED, LAST_UPDATED, ACCOUNT_STATE, DATE_WITHDRAW, GRADE)
+        VALUES (#{email},#{pw},#{nickname},NOW(),NOW(),1,NULL,1)
+    </insert>
+
+    <select id="selectThemeByProduct" parameterType="int" resultType="com.example.demo.ThemeVO">
+        <!-- selectThemeByProduct -->
+        select a.theme_id, a.theme_title, a.theme_title_en, a.theme_dscrp, a.thumbnail_link
+        from product_theme a
+        inner join product_info b
+        on a.theme_id = b.theme_id
+        where b.product_number = #{product_number}
+    </select>
+
+    <select id="selectListViewedProduct" parameterType="java.util.ArrayList" resultType="com.example.demo.ProductVO">
+        <!-- selectListViewedProduct -->
+        <include refid="selectProductInfoSQL" />
+        where b.sale_enabled > 0
+
+        and a.product_number in
+        <choose>
+            <when test="product_number_arr.size > 0">
+                <foreach collection="product_number_arr" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                (0)
+            </otherwise>
+        </choose>
+        <if test="product_number_arr.size > 0">
+            ORDER BY FIELD(a.product_number, <foreach collection="product_number_arr" item="item" separator=",">#{item}</foreach>)
+        </if>
+    </select>
+    
+    <select id="selectListWishedProduct" parameterType="string" resultType="com.example.demo.ProductVO">
+        <!-- selectListWishedProduct -->
+        <include refid="selectProductInfoSQL" />
+        inner join user_wish c on a.product_id = c.product_id
+        where b.sale_enabled > 0
+        and c.email = #{email}
+        and c.wish = 1
+        order by c.date_registed desc
+    </select>
+
+    <insert id="insertAddWish" parameterType="java.util.HashMap">
+        <!-- insertAddWish -->
+
+        insert into user_wish(wish_id, email, product_id)
+        values(
+            (	select wish_id
+                from user_wish a
+                where a.email = #{email} and a.product_id = #{product_id}
+            ), #{email}, #{product_id}
+        ) on duplicate key update date_updated = now(), wish = 1;
+    </insert>
+
+    <update id="updateDelWish" parameterType="java.util.HashMap">
+        <!-- updateDelWish -->
+        update user_wish
+        set wish = 0, date_updated = now()
+        where email = #{email} and product_id = #{product_id}
+    </update>
+
+    <insert id="createToken" parameterType="java.util.HashMap">
+        <!-- createToken -->
+        insert into user_token (email,token)
+            select email,#{token} as token
+            from user
+            where email = #{email}
+        on duplicate key update date_created = now(), token = #{token}
+    </insert>
+
+    <select id="selectTokenChk" parameterType="java.util.HashMap" resultType="com.example.demo.TokenVO">
+        <!-- selectTokenChk -->
+        select email, token, date_created &lt; DATE_SUB(NOW(), INTERVAL 1 hour) as expired
+        from user_token
+        where email = #{email} and token = #{token}
+    </select>
+
+    <update id="updatePassword" parameterType="java.util.HashMap">
+        <!-- updatePassword -->
+        update user
+        set password = #{pw}, LAST_UPDATED = now()
+        where email = #{email}
+    </update>
+
+
+    <select id="selectProductEnable" parameterType="java.util.ArrayList" resultType="int">
+        <!-- selectProductEnable -->
+        select count(1)
+        from product_info
+        where product_id in
+        <foreach collection="cart_info_list" item="item" open="(" close=")" separator=",">
+            (
+                select a.product_id
+                from product_info a
+                inner join product_sale b on a.product_id = b.product_id
+                where b.ea >= #{item.order_quantity} and b.sale_enabled = 1
+                and a.product_id = #{item.product_id}
+            )
+        </foreach>
+
+    </select>
+
+    <insert id="insertAddCart" parameterType="java.util.HashMap">
+        <!-- insertAddCart -->
+
+        insert into user_cart(email, product_id, ea)
+        values(#{email}, #{product_id}, #{order_quantity})
+    </insert>
+
+    <select id="selectListCartProduct" parameterType="string" resultType="com.example.demo.ProductVO">
+        <!-- selectListCartProduct -->
+
+        select
+        a.product_id,
+        a.title,
+        a.image,
+        a.price,
+        a.pieces,
+        a.ages,
+        a.product_number,
+        a.date_released,
+        a.dtl_img_list,
+
+        b.sale_enabled,
+        b.discounting,
+        b.rate_discount,
+        b.ea,
+
+        c.ea as order_quantity,
+        c.cart_id
+
+        from product_info a
+        inner join product_sale b on a.product_id = b.product_id
+        inner join user_cart c on a.product_id = c.product_id
+        where b.sale_enabled > 0
+        and c.email = #{email}
+        and c.in_cart = 1
+        order by c.date_registed desc
+    </select>
+
+    <update id="updateDelCart" parameterType="java.util.HashMap">
+        <!-- updateDelCart -->
+        update user_cart
+        set in_cart = 0, date_updated = now()
+        where email = #{email} and in_cart = 1 and cart_id = #{cart_id}
+    </update>
+
+    <update id="updateDelCarts" parameterType="java.util.HashMap">
+        <!-- updateDelCarts -->
+        update user_cart
+        set in_cart = 0, date_updated = now()
+        where email = #{email} and in_cart = 1 and cart_id in
+        <foreach collection="cart_info" item="cart" open="(" close=")" separator="," >
+            #{cart.cart_id}
+        </foreach>
+    </update>
+
+    <update id="updateRollbackCarts" parameterType="java.util.HashMap">
+        <!-- updateRollbackCarts -->
+        update user_cart
+        set in_cart = 1, date_updated = now()
+        where email = #{email} and in_cart = 0 and cart_id in
+        <foreach collection="cart_info" item="cart" open="(" close=")" separator="," >
+            #{cart.cart_id}
+        </foreach>
+    </update>
+
+
+    <update id="updateQuantityCart" parameterType="java.util.HashMap">
+        <!-- updateQuantityCart -->
+        update user_cart
+        set ea = #{order_quantity}, date_updated = now()
+        where email = #{email} and in_cart = 1 and cart_id = #{cart_id}
+    </update>
 
     <select id="selectUserInfo" parameterType="java.util.HashMap" resultType="com.example.demo.UserVO">
-        SELECT EMAIL, NAME, IMAGE, GRADE
-        FROM USER
+        <!-- selectUserInfo -->
+        <include refid="selectUserInfoSQL" />
         WHERE EMAIL = #{email}
-          AND ACCOUNT_EXPIRED != TRUE
-        AND ACCOUNT_LOCKED != TRUE
-        AND ACCOUNT_WITHDRAW != TRUE
     </select>
 
+    <update id="updateWakeupAccount" parameterType="java.util.HashMap">
+        <!-- updateWakeupAccount -->
+        update user
+        set account_state = 1, last_updated = now()
+        where email = #{email}
+    </update>
+
+    <select id="selectNameChk" parameterType="java.util.HashMap" resultType="com.example.demo.UserVO">
+        <!-- selectNameChk -->
+        <include refid="selectUserInfoSQL" />
+        WHERE NAME = #{nickname}
+    </select>
+
+    <update id="updateUserInfo" parameterType="java.util.HashMap">
+        <!-- updateUserInfo -->
+        update user
+        set name = #{nickname}, last_updated = now()
+        where email = #{email}
+    </update>
+
+    <update id="updateWithdrawAccount" parameterType="java.util.HashMap">
+        <!-- updateWithdrawAccount -->
+        update user
+        set account_state = 9, last_updated = now(), date_withdraw = now()
+        where email = #{email}
+    </update>
+
+    <insert id="insertShipping" parameterType="java.util.HashMap">
+        <!-- insertShipping -->
+
+        INSERT INTO USER_SHIPPING (
+            EMAIL,
+            RECIPIENT,
+            SHIPPING_NAME,
+            TEL_NUMBER,
+            SHIPPING_ZIPCODE,
+            SHIPPING_ADDRESS1,
+            SHIPPING_ADDRESS2,
+            SHIPPING_DEFAULT,
+            DELIVERY_REQUEST,
+            DELIVERY_REQUEST_DIRECT,
+            DATE_REGISTED,
+            DATE_UPDATED,
+            STATE
+        )
+        VALUES (
+                (select email
+                 from user
+                 where email = #{email}
+                 ),#{recipient},#{shippingName},CONCAT(#{telNumberFront},#{telNumberMiddle},#{telNumberBack}),
+                #{shippingZipCode},#{shippingAddress1},#{shippingAddress2},#{shippingDefault},#{deliveryRequest},
+                #{deliveryRequestDirect},NOW(),NOW(),1)
+    </insert>
+
+    <select id="selectListShipping" parameterType="java.util.HashMap" resultType="com.example.demo.ShippingVO">
+        <!-- selectListShipping -->
+
+        select shipping_id,
+               email,
+               recipient,
+               shipping_name,
+               tel_number,
+               shipping_zipcode,
+               shipping_address1,
+               shipping_address2,
+               shipping_default,
+               delivery_request,
+               delivery_request_direct,
+               state
+        from user_shipping
+        where email = #{email} and state in (0,1)
+        order by shipping_default desc, priority desc, date_registed asc
+        limit #{offset},#{take}
+    </select>
+
+    <select id="selectListShippingCount" parameterType="java.util.HashMap" resultType="int">
+        <!-- selectListShippingCount -->
+
+        select count(1)
+        from user_shipping
+        where email = #{email} and state in (0,1)
+    </select>
+
+    <update id="updateShipping" parameterType="java.util.HashMap">
+        <!-- updateShipping -->
+        update USER_SHIPPING
+        set EMAIL = #{email},
+            RECIPIENT = #{recipient},
+            SHIPPING_NAME = #{shippingName},
+            TEL_NUMBER = CONCAT(#{telNumberFront},#{telNumberMiddle},#{telNumberBack}),
+            SHIPPING_ZIPCODE = #{shippingZipCode},
+            SHIPPING_ADDRESS1 = #{shippingAddress1},
+            SHIPPING_ADDRESS2 = #{shippingAddress2},
+            SHIPPING_DEFAULT = #{shippingDefault},
+            DELIVERY_REQUEST = #{deliveryRequest},
+            DELIVERY_REQUEST_DIRECT = #{deliveryRequestDirect},
+            DATE_UPDATED = NOW()
+        where shipping_id = #{shippingId} and email = #{email}
+    </update>
+
+    <update id="resetShippingDefault" parameterType="java.util.HashMap">
+        <!-- resetShippingDefault -->
+        update USER_SHIPPING
+        set SHIPPING_DEFAULT = 0
+        where email = #{email}
+    </update>
+
+    <update id="updateDelShipping" parameterType="java.util.HashMap">
+        <!-- updateDelShipping -->
+
+        update USER_SHIPPING
+        set state = 9, DATE_UPDATED = NOW()
+        where shipping_id = #{shippingId} and email=#{email}
+    </update>
+
+    <update id="updateShippingPriority" parameterType="java.util.HashMap">
+        <!-- updateShippingPriority -->
+        <selectKey resultType="int" keyProperty="priority" order="BEFORE">
+            SELECT MAX(priority)+1 FROM USER_SHIPPING
+        </selectKey>
+        update USER_SHIPPING
+        set priority = #{priority}, DATE_UPDATED = NOW()
+        where shipping_id = #{shippingId} and email=#{email}
+    </update>
+
+    <update id="updateUserImage" parameterType="string">
+        <!-- updateUserImage -->
+
+        update user
+        set image = #{savedPath}, last_updated = now()
+        where email = #{email}
+    </update>
+
+    <update id="updateDefaultImage" parameterType="string">
+        <!-- updateDefaultImage -->
+
+        update user
+        set image = null, last_updated = now()
+        where email = #{email}
+    </update>
+
+    <update id="updateShippingDeliveryRequest" parameterType="java.util.HashMap">
+        <!-- updateShippingDeliveryRequest -->
+
+        update user_shipping
+        set delivery_request = #{delivery_request}, delivery_request_direct = #{delivery_request_direct}, date_updated = now()
+        where email = #{email} and shipping_id = #{shipping_id}
+    </update>
+
+    <insert id="insertOrderGroup" parameterType="java.util.HashMap">
+        <!-- insertOrderGroup -->
+        insert into user_order_group (email, shipping_id, state, date_registed, date_updated)
+        values (#{email}, #{shipping_id}, 2, now(), now())
+    </insert>
+
+    <insert id="insertOrderItem" parameterType="java.util.HashMap">
+        <selectKey resultType="int" keyProperty="order_group_id" order="BEFORE">
+            SELECT max(order_group_id) FROM user_order_group where email = #{email}
+        </selectKey>
+
+        <!-- insertOrderItem -->
+        insert into user_order_item (email, product_id, ea, price, discounting, rate_discount, pay_price, date_registed, date_updated, order_group_id, cart_id)
+        values
+            <foreach collection="cart_info" item="cart"  separator="," >
+                (#{email}, #{cart.product_id}, #{cart.order_quantity}, #{cart.price}, #{cart.discounting}, #{cart.rate_discount},
+
+            <choose>
+                <when test="cart.discounting != 0">
+                    #{cart.order_quantity} * #{cart.price} * (1 - #{cart.rate_discount}/100)
+                </when>
+                <otherwise>
+                    #{cart.order_quantity} * #{cart.price}
+                </otherwise>
+            </choose>
+            , now(),now(), #{order_group_id}, #{cart.cart_id})
+            </foreach>
+    </insert>
+
+    <select id="selectListOrderItems" parameterType="java.util.HashMap" resultType="com.example.demo.OrderVO">
+        <!-- selectListOrderItems -->
+        select
+            a.order_group_id,
+            a.state,
+            a.date_registed,
+            b.pay_price,
+            b.ea as order_quantity,
+            c.product_id,
+            c.product_number,
+            c.title,
+            c.image,
+            d.recipient,
+            d.tel_number,
+            d.shipping_address1,
+            d.shipping_address2,
+            d.delivery_request,
+            d.delivery_request_direct
+
+        from user_order_group a
+             inner join user_order_item b
+                        on a.order_group_id = b.order_group_id
+             inner join product_info c
+                        on b.product_id = c.product_id
+             inner join user_shipping d
+                        on a.shipping_id = d.shipping_id
+
+        where a.email = #{email}
+
+        order by a.date_registed desc
+        limit #{offset} ,#{take}
+    </select>
+
+    <select id="selectCountOrderItems" parameterType="java.util.HashMap" resultType="int">
+        <!-- selectCountOrderItems -->
+        select count(1)
+        from user_order_group a
+        inner join user_order_item b
+        on a.order_group_id = b.order_group_id
+        where a.email = #{email}
+    </select>
+
+    <update id="updateOrderRefund" parameterType="java.util.HashMap">
+        <!-- updateOrderRefund -->
+        update user_order_group
+        set state = 7, date_updated = now()
+        where email = #{email} and order_group_id = #{order_group_id}
+    </update>
+
+    <update id="updateAddQuantityProduct" parameterType="java.util.ArrayList">
+        <!-- updateAddQuantityProduct -->
+
+
+        <foreach collection="product_quantity_arr" item="item" separator=";">
+            update product_sale
+            set ea = ea + #{item.order_quantity}, date_updated = now()
+            where product_id = #{item.product_id}
+        </foreach>
+
+    </update>
+
+    <update id="updateSubQuantityProduct" parameterType="java.util.ArrayList">
+        <!-- updateSubQuantityProduct -->
+
+        <foreach collection="product_quantity_arr" item="item" separator=";">
+            update product_sale
+            set ea = ea - #{item.order_quantity}, date_updated = now()
+            where product_id = #{item.product_id}
+        </foreach>
+    </update>
+
+    <select id="selectListOrderQuantity" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        <!-- selectListOrderQuantity -->
+        select product_id, ea as order_quantity, cart_id
+        from user_order_item
+        where email = #{email} and order_group_id = #{order_group_id}
+    </select>
+
+    <update id="updateNoStockProduct" parameterType="java.util.ArrayList">
+        <!-- updateNoStockProduct -->
+
+        <foreach collection="product_quantity_arr" item="item" separator=";">
+            update product_sale
+            set sale_enabled = 9, date_updated = now()
+            where ea = 0 and sale_enabled = 1 and product_id = #{item.product_id}
+        </foreach>
+    </update>
+
+    <update id="updateRollbackNoStockProduct" parameterType="java.util.ArrayList">
+        <!-- updateRollbackNoStockProduct -->
+
+        <foreach collection="product_quantity_arr" item="item" separator=";">
+            update product_sale
+            set sale_enabled = 1, date_updated = now()
+            where ea != 0 and sale_enabled = 9 and product_id = #{item.product_id}
+        </foreach>
+    </update>
 </mapper>
