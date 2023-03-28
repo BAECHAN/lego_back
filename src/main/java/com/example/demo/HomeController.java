@@ -505,10 +505,6 @@ public class HomeController {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
-        System.err.println(uploadFile);
-        System.err.println(isDefault);
-        System.err.println(email);
-
         int result = 0;
 
         if(uploadFile != null && "0".equals(isDefault)){
