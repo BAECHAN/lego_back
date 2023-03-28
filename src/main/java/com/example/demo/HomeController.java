@@ -41,12 +41,6 @@ public class HomeController {
 
         int offset = page * take;
 
-        System.err.println(theme_id);
-        System.err.println(page);
-        System.err.println(take);
-        System.err.println(sort);
-        System.err.println(filter);
-
         List<ProductVO> productList = service.selectListProduct(theme_id,offset,take,sort,filter);
         int productListCount = service.selectListProductCount(theme_id,filter);
 
