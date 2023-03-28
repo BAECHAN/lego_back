@@ -18,7 +18,7 @@
                  when GRADE = 4 then 'vip'
                  when GRADE = 5 then 'vvip'
                  else 'blank' end as GRADE
-        FROM USER
+        FROM user
     </sql>
     <sql id="selectProductInfoSQL">
         select
@@ -249,7 +249,7 @@
             )
         </if>
     </sql>
-    
+
 
     <select id="selectListTheme" parameterType="string" resultType="com.example.demo.ThemeVO">
         <!-- selectListTheme -->
@@ -351,7 +351,7 @@
 
     <insert id="insertAccount" parameterType="java.util.HashMap">
         <!-- insertAccount -->
-        INSERT INTO USER (EMAIL, PASSWORD, NAME, DATE_CREATED, LAST_UPDATED, ACCOUNT_STATE, DATE_WITHDRAW, GRADE)
+        INSERT INTO user (EMAIL, PASSWORD, NAME, DATE_CREATED, LAST_UPDATED, ACCOUNT_STATE, DATE_WITHDRAW, GRADE)
         VALUES (#{email},#{pw},#{nickname},NOW(),NOW(),1,NULL,1)
     </insert>
 
@@ -384,7 +384,7 @@
             ORDER BY FIELD(a.product_number, <foreach collection="product_number_arr" item="item" separator=",">#{item}</foreach>)
         </if>
     </select>
-    
+
     <select id="selectListWishedProduct" parameterType="string" resultType="com.example.demo.ProductVO">
         <!-- selectListWishedProduct -->
         <include refid="selectProductInfoSQL" />
@@ -564,7 +564,7 @@
     <insert id="insertShipping" parameterType="java.util.HashMap">
         <!-- insertShipping -->
 
-        INSERT INTO USER_SHIPPING (
+        INSERT INTO user_shipping (
             EMAIL,
             RECIPIENT,
             SHIPPING_NAME,
@@ -619,7 +619,7 @@
 
     <update id="updateShipping" parameterType="java.util.HashMap">
         <!-- updateShipping -->
-        update USER_SHIPPING
+        update user_shipping
         set EMAIL = #{email},
             RECIPIENT = #{recipient},
             SHIPPING_NAME = #{shippingName},
@@ -636,7 +636,7 @@
 
     <update id="resetShippingDefault" parameterType="java.util.HashMap">
         <!-- resetShippingDefault -->
-        update USER_SHIPPING
+        update user_shipping
         set SHIPPING_DEFAULT = 0
         where email = #{email}
     </update>
@@ -644,7 +644,7 @@
     <update id="updateDelShipping" parameterType="java.util.HashMap">
         <!-- updateDelShipping -->
 
-        update USER_SHIPPING
+        update user_shipping
         set state = 9, DATE_UPDATED = NOW()
         where shipping_id = #{shippingId} and email=#{email}
     </update>
@@ -652,9 +652,9 @@
     <update id="updateShippingPriority" parameterType="java.util.HashMap">
         <!-- updateShippingPriority -->
         <selectKey resultType="int" keyProperty="priority" order="BEFORE">
-            SELECT MAX(priority)+1 FROM USER_SHIPPING
+            SELECT MAX(priority)+1 FROM user_shipping
         </selectKey>
-        update USER_SHIPPING
+        update user_shipping
         set priority = #{priority}, DATE_UPDATED = NOW()
         where shipping_id = #{shippingId} and email=#{email}
     </update>
