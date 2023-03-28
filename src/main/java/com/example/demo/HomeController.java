@@ -25,10 +25,6 @@ public class HomeController {
     public ResponseEntity getThemeList() throws Exception {
 
         List<ThemeVO> themeList = service.selectListTheme();
-        for(int i=0;i<themeList.size();i++) {
-            System.err.println(themeList.get(i).getTheme_id());
-            System.err.println(themeList.get(i).getTheme_title());
-        }
         return new ResponseEntity(themeList, HttpStatus.OK);
     }
 
@@ -542,9 +538,6 @@ public class HomeController {
         int take = Integer.parseInt(paramMap.get("take").toString());
 
         int offset = page * take;
-
-        System.err.println(page);
-        System.err.println(take);
 
         List<OrderVO> orderList = service.selectListOrderItems(email,offset,take);
         int orderListCount = service.selectCountOrderItems(email);
