@@ -193,8 +193,6 @@ public class HomeController {
     public ResponseEntity getUserInfo(@RequestParam HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        System.out.println("파람 : "+ paramMap);
-
         UserVO userInfo = service.selectUserInfo(paramMap);
 
         if(userInfo != null){
