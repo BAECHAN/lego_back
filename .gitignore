@@ -34,3 +34,4 @@ build/
 
 ### env ###
 application-db.properties
+log4jdbc.log4j2.properties
