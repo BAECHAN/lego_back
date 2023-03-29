@@ -153,8 +153,6 @@ public class HomeController {
     public ResponseEntity getLoginChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        System.out.println("파람 : "+ paramMap);
-
         UserVO userInfo = service.selectLoginChk(paramMap);
 
         if(userInfo != null){
