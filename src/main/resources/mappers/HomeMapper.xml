@@ -12,6 +12,7 @@
             DATE_CREATED,
             ACCOUNT_STATE,
             DATE_WITHDRAW,
+            OAUTH_CONNECT,
             case when GRADE = 1 then 'bronze'
                  when GRADE = 2 then 'silver'
                  when GRADE = 3 then 'gold'
@@ -458,8 +459,14 @@
     <insert id="insertAddCart" parameterType="java.util.HashMap">
         <!-- insertAddCart -->
 
-        insert into user_cart(email, product_id, ea)
-        values(#{email}, #{product_id}, #{order_quantity})
+        insert into user_cart(cart_id, product_id, email, ea)
+        values(
+            (
+            select cart_id
+            from user_cart a
+            where a.email = #{email} and a.product_id = #{product_id} and a.in_cart = 1
+            ), #{product_id}, #{email}, #{order_quantity}
+        ) on duplicate key update date_updated = now(), ea = ea + #{order_quantity};
     </insert>
 
     <select id="selectListCartProduct" parameterType="string" resultType="com.example.demo.ProductVO">
@@ -524,7 +531,15 @@
     <update id="updateQuantityCart" parameterType="java.util.HashMap">
         <!-- updateQuantityCart -->
         update user_cart
-        set ea = #{order_quantity}, date_updated = now()
+        <choose>
+            <when test="state == 'updateAdd'">
+                set ea = ea + 1
+            </when>
+            <otherwise>
+                set ea = ea - 1
+            </otherwise>
+        </choose>
+            , date_updated = now()
         where email = #{email} and in_cart = 1 and cart_id = #{cart_id}
     </update>
 
@@ -761,26 +776,30 @@
         where email = #{email} and order_group_id = #{order_group_id}
     </update>
 
-    <update id="updateAddQuantityProduct" parameterType="java.util.ArrayList">
-        <!-- updateAddQuantityProduct -->
+    <update id="updateQuantityProduct" parameterType="java.util.HashMap">
+        <!-- updateQuantityProduct -->
 
+        update product_sale
+        set ea = ea
+        <choose>
+            <when test="state == 'add'">
+                - #{order_quantity}
+            </when>
+            <when test="state == 'updateAdd'">
+                - 1
+            </when>
+            <when test="state == 'updateSub'">
+                + 1
+            </when>
+            <when test="state == 'del'">
+                + #{order_quantity}
+            </when>
+            <otherwise>
 
-        <foreach collection="product_quantity_arr" item="item" separator=";">
-            update product_sale
-            set ea = ea + #{item.order_quantity}, date_updated = now()
-            where product_id = #{item.product_id}
-        </foreach>
-
-    </update>
-
-    <update id="updateSubQuantityProduct" parameterType="java.util.ArrayList">
-        <!-- updateSubQuantityProduct -->
-
-        <foreach collection="product_quantity_arr" item="item" separator=";">
-            update product_sale
-            set ea = ea - #{item.order_quantity}, date_updated = now()
-            where product_id = #{item.product_id}
-        </foreach>
+            </otherwise>
+        </choose>
+        , date_updated = now()
+        where product_id = #{product_id}
     </update>
 
     <select id="selectListOrderQuantity" parameterType="java.util.HashMap" resultType="java.util.HashMap">
@@ -790,23 +809,19 @@
         where email = #{email} and order_group_id = #{order_group_id}
     </select>
 
-    <update id="updateNoStockProduct" parameterType="java.util.ArrayList">
+    <update id="updateNoStockProduct" parameterType="java.util.HashMap">
         <!-- updateNoStockProduct -->
 
-        <foreach collection="product_quantity_arr" item="item" separator=";">
-            update product_sale
-            set sale_enabled = 9, date_updated = now()
-            where ea = 0 and sale_enabled = 1 and product_id = #{item.product_id}
-        </foreach>
+        update product_sale
+        set sale_enabled = 9, date_updated = now()
+        where ea = 0 and sale_enabled = 1 and product_id = #{product_id}
     </update>
 
-    <update id="updateRollbackNoStockProduct" parameterType="java.util.ArrayList">
+    <update id="updateRollbackNoStockProduct" parameterType="java.util.HashMap">
         <!-- updateRollbackNoStockProduct -->
 
-        <foreach collection="product_quantity_arr" item="item" separator=";">
-            update product_sale
-            set sale_enabled = 1, date_updated = now()
-            where ea != 0 and sale_enabled = 9 and product_id = #{item.product_id}
-        </foreach>
+        update product_sale
+        set sale_enabled = 1, date_updated = now()
+        where ea != 0 and sale_enabled = 9 and product_id = #{product_id}
     </update>
 </mapper>
