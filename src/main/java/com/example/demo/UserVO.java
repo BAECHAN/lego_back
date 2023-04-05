@@ -17,4 +17,6 @@ public class UserVO {
 
     private Date date_withdraw;
     private String grade;
+
+    private int oauth_connect;
 }

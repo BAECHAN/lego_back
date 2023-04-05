@@ -257,9 +257,8 @@ public class HomeController {
 
         int result = service.insertAddWish(paramMap);
 
-        if(result == 1){
-            resultMap.put("product_id",paramMap.get("product_id").toString());
-            resultMap.put("wish",true);
+        if(result > 0){
+            resultMap.put("result",result);
         }
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
@@ -272,9 +271,8 @@ public class HomeController {
 
         int result = service.updateDelWish(paramMap);
 
-        if(result == 1){
-            resultMap.put("product_id",paramMap.get("product_id"));
-            resultMap.put("wish",false);
+        if(result > 0){
+            resultMap.put("result",result);
         }
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
@@ -331,8 +329,8 @@ public class HomeController {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
-        int result = service.insertAddCart(paramMap);
-
+        int result = service.addCart(paramMap);
+        System.err.println(result);
         if(result > 0){
             resultMap.put("result",result);
         }
@@ -357,7 +355,7 @@ public class HomeController {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
-        int result = service.updateDelCart(paramMap);
+        int result = service.delCart(paramMap);
 
         if(result == 1){
             resultMap.put("result",result);
@@ -374,14 +372,11 @@ public class HomeController {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
-        int result = service.updateQuantityCart(paramMap);
+        System.err.println(paramMap);
 
-        if(result == 1){
-            resultMap.put("result",result);
-            resultMap.put("cartId",paramMap.get("cart_id"));
-        }else{
-            resultMap.put("result",0);
-        }
+        int result = service.updateQuantity(paramMap);
+
+        resultMap.put("result",result);
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }

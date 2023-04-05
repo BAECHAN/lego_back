@@ -90,13 +90,11 @@ public interface HomeMapper {
     int selectCountOrderItems(String email) throws Exception;
 
     int updateOrderRefund(HashMap<String, Object> paramMap) throws Exception;
-
-    int updateAddQuantityProduct(ArrayList<HashMap<String, Object>> product_quantity_arr) throws Exception;
-    int updateSubQuantityProduct(ArrayList<HashMap<String, Object>> product_quantity_arr) throws Exception;
-
     ArrayList<HashMap<String,Object>> selectListOrderQuantity(HashMap<String, Object> paramMap) throws Exception;
 
-    int updateNoStockProduct(ArrayList<HashMap<String, Object>> product_quantity_arr) throws Exception;
+    int updateNoStockProduct(HashMap<String, Object> paramMap) throws Exception;
 
-    int updateRollbackNoStockProduct(ArrayList<HashMap<String, Object>> product_quantity_arr) throws Exception;
+    int updateRollbackNoStockProduct(HashMap<String, Object> paramMap) throws Exception;
+
+    int updateQuantityProduct(HashMap<String, Object> paramMap) throws Exception;
 }
