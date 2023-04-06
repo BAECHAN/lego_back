@@ -352,9 +352,16 @@
 
     <insert id="insertAccount" parameterType="java.util.HashMap">
         <!-- insertAccount -->
-        INSERT INTO user (EMAIL, PASSWORD, NAME, DATE_CREATED, LAST_UPDATED, ACCOUNT_STATE, DATE_WITHDRAW, GRADE)
-        VALUES (#{email},#{pw},#{nickname},NOW(),NOW(),1,NULL,1)
+        INSERT INTO user (EMAIL, PASSWORD, NAME, DATE_CREATED, LAST_UPDATED, ACCOUNT_STATE, DATE_WITHDRAW, GRADE, OAUTH_CONNECT)
+        VALUES (#{email},#{pw},#{nickname},NOW(),NOW(),1,NULL,1,#{provider})
     </insert>
+
+    <update id="updateUserOauth" parameterType="java.util.HashMap">
+        <!-- updateUserOauth -->
+        update user
+        set oauth_connect = #{provider}, LAST_UPDATED = now()
+        where email = #{email} and account_state = 1
+    </update>
 
     <select id="selectThemeByProduct" parameterType="int" resultType="com.example.demo.ThemeVO">
         <!-- selectThemeByProduct -->
