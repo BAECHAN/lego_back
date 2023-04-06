@@ -198,10 +198,42 @@ public class HomeController {
         if(userInfo != null){
             resultMap.put("result",userInfo);
         }
-        System.out.println(resultMap.get("result"));
-        System.out.println(userInfo.getDate_created());
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-user-info-oauth")
+    public ResponseEntity getUserInfoOAuth(@RequestParam HashMap<String,Object> paramMap) throws Exception{
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        int result = service.selectUserUpdateConnect(paramMap);
+
+        if(result == 200){
+            return new ResponseEntity(resultMap, HttpStatus.OK);
+        }else if(result == 201) {
+            return new ResponseEntity(resultMap,HttpStatus.CREATED);
+
+        }else if(result == 500) {
+            resultMap.put("result","server-error");
+            return new ResponseEntity(resultMap, HttpStatus.OK);
+        }else {
+            return new ResponseEntity(resultMap, HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @PatchMapping("/upd-user-oauth")
+    public ResponseEntity updateUserOauth(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        int result = service.updateUserOauth(paramMap);
+
+        if(result > 0){
+            return new ResponseEntity(resultMap, HttpStatus.OK);
+        }else{
+            return new ResponseEntity(resultMap, HttpStatus.NO_CONTENT);
+        }
+
     }
 
     @GetMapping("/theme-by-product")

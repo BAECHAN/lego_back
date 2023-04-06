@@ -439,5 +439,29 @@ public class HomeService {
         return homeMapper.selectListOrderQuantity(paramMap);
     }
 
+    public int updateUserOauth(HashMap<String, Object> paramMap) throws Exception{
+        return homeMapper.updateUserOauth(paramMap);
+    }
 
+    @Transactional
+    public int selectUserUpdateConnect(HashMap<String, Object> paramMap) throws Exception{
+
+        UserVO userInfo = selectUserInfo(paramMap);
+        if (userInfo != null){
+            if(userInfo.getOauth_connect() != null){
+                return 200;
+            }else{
+                try {
+                    updateUserOauth(paramMap);
+                    return 201;
+
+                } catch(SQLException sqle){
+                    sqle.printStackTrace();
+                    return 500;
+                }
+            }
+        }else{
+            return 204;
+        }
+    }
 }
