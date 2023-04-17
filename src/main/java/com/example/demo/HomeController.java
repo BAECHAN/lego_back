@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,16 +31,25 @@ public class HomeController {
         return new ResponseEntity(themeList, HttpStatus.OK);
     }
 
-    @PostMapping("/product-list")
-    public ResponseEntity getProductList(@RequestBody HashMap<String,Object> paramMap)throws Exception {
-
+    @GetMapping("/product-list")
+    public ResponseEntity getProductList(@RequestParam HashMap<String,Object> paramMap)throws Exception {
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
         int theme_id = Integer.parseInt(paramMap.get("theme_id").toString());
         int page = Integer.parseInt(paramMap.get("page").toString());
         int take = Integer.parseInt(paramMap.get("take").toString());
         String sort = paramMap.get("sort").toString();
-        HashMap<String,Object> filter = (HashMap<String, Object>) paramMap.get("filter");
+
+        String jsonString = paramMap.get("filter").toString();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        HashMap<String,Object> filter = new HashMap<String,Object>();
+
+        try{
+            filter = objectMapper.readValue(jsonString, new TypeReference<HashMap<String, Object>>() {});
+        }catch (JsonProcessingException e){
+            e.printStackTrace();
+        }
 
         int offset = page * take;
 
