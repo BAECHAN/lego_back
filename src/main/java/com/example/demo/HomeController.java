@@ -51,7 +51,7 @@ public class HomeController {
             e.printStackTrace();
         }
 
-        int offset = page * take;
+        int offset = (page-1) * take;
 
         List<ProductVO> productList = service.selectListProduct(theme_id,offset,take,sort,filter);
         int productListCount = service.selectListProductCount(theme_id,filter);
