@@ -97,23 +97,22 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/email-chk")
-    public ResponseEntity getEmailChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
-        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+    @PostMapping("/email-chk")
+    public ResponseEntity getEmailChk(@RequestBody HashMap<String,Object> paramMap) throws Exception{
 
-        UserVO userInfo = service.selectUserInfo(paramMap);
+        Optional<UserVO> userInfo = Optional.ofNullable(service.selectUserInfo(paramMap));
 
-        if(userInfo != null){
-            resultMap.put("result",userInfo.getAccount_state());
+        if(userInfo.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            // 이메일 중복
         }else{
-            resultMap.put("result",0);
+            return ResponseEntity.status(HttpStatus.OK).build();
+            // 이메일 사용 가능
         }
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/nickname-chk")
-    public ResponseEntity getNicknameChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
+    @PostMapping("/nickname-chk")
+    public ResponseEntity getNicknameChk(@RequestBody HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
         UserVO userInfo = service.selectNameChk(paramMap);
@@ -161,8 +160,8 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/login-chk")
-    public ResponseEntity getLoginChk(@RequestParam HashMap<String,Object> paramMap) throws Exception{
+    @PostMapping("/login-chk")
+    public ResponseEntity getLoginChk(@RequestBody HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
         UserVO userInfo = service.selectLoginChk(paramMap);
@@ -201,21 +200,21 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/get-user-info")
-    public ResponseEntity getUserInfo(@RequestParam HashMap<String,Object> paramMap) throws Exception{
-        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+//    @PostMapping("/get-user-info")
+//    public ResponseEntity getUserInfo(@RequestBody HashMap<String,Object> paramMap) throws Exception{
+//        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+//
+//        UserVO userInfo = service.selectUserInfo(paramMap);
+//
+//        if(userInfo != null){
+//            resultMap.put("result",userInfo);
+//        }
+//
+//        return new ResponseEntity(resultMap, HttpStatus.OK);
+//    }
 
-        UserVO userInfo = service.selectUserInfo(paramMap);
-
-        if(userInfo != null){
-            resultMap.put("result",userInfo);
-        }
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
-    }
-
-    @GetMapping("/get-user-info-oauth")
-    public ResponseEntity getUserInfoOAuth(@RequestParam HashMap<String,Object> paramMap) throws Exception{
+    @PostMapping("/get-user-info-oauth")
+    public ResponseEntity getUserInfoOAuth(@RequestBody HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
         int result = service.selectUserUpdateConnect(paramMap);
@@ -260,20 +259,12 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @PostMapping("/product-viewed-list")
-    public ResponseEntity getProductViewedList(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+    @GetMapping("/product-viewed-list")
+    public ResponseEntity getProductViewedList(@RequestParam(value = "product_number_arr") List<String> productNumbers)throws Exception {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
-        System.err.println(paramMap);
-        ArrayList<Integer> product_number_arr = (ArrayList<Integer>) paramMap.get("product_number_arr");
-
-        System.err.println(product_number_arr);
-
-        List<ProductVO> productList = service.selectListViewedProduct(product_number_arr);
-
-        System.err.println(productList);
-        System.err.println(productList.size());
+        List<ProductVO> productList = service.selectListViewedProduct(productNumbers);
 
         resultMap.put("productList",productList);
         resultMap.put("productListCount",productList.size());
@@ -281,13 +272,13 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/product-wish-list")
-    public ResponseEntity getProductWishList(@RequestParam(value= "page", required=true) int page,
-                                             @RequestParam(value= "email", required = true) String email) throws Exception {
+    @PostMapping("/product-wish-list")
+    public ResponseEntity getProductWishList(@RequestBody HashMap<String,Object> paramMap) throws Exception {
 
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        List<HashMap> wishList = service.selectListWishedProduct(page, email);
+        System.err.println(paramMap);
+        List<HashMap> wishList = service.selectListWishedProduct(paramMap);
 
         resultMap.put("wishList",wishList);
 
