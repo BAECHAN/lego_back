@@ -54,7 +54,7 @@ public class HomeService {
         return homeMapper.selectThemeByProduct(product_number);
     }
 
-    public List<ProductVO> selectListViewedProduct(ArrayList<Integer> product_number_arr) throws Exception {
+    public List<ProductVO> selectListViewedProduct(List<String> product_number_arr) throws Exception {
         return homeMapper.selectListViewedProduct(product_number_arr);
     }
 
