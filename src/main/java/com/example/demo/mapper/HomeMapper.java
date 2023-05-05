@@ -27,7 +27,7 @@ public interface HomeMapper {
 
     List<ProductVO> selectListViewedProduct(List<String> product_number_arr) throws Exception;
 
-    List<HashMap> selectListWishedProduct(int page, String email) throws Exception;
+    List<HashMap> selectListWishedProduct(HashMap<String, Object> paramMap) throws Exception;
 
     int insertAddWish(HashMap<String, Object> paramMap) throws Exception;
 

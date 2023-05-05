@@ -272,13 +272,13 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/product-wish-list")
-    public ResponseEntity getProductWishList(@RequestParam(value= "page", required=true) int page,
-                                             @RequestParam(value= "email", required = true) String email) throws Exception {
+    @PostMapping("/product-wish-list")
+    public ResponseEntity getProductWishList(@RequestBody HashMap<String,Object> paramMap) throws Exception {
 
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        List<HashMap> wishList = service.selectListWishedProduct(page, email);
+        System.err.println(paramMap);
+        List<HashMap> wishList = service.selectListWishedProduct(paramMap);
 
         resultMap.put("wishList",wishList);
 

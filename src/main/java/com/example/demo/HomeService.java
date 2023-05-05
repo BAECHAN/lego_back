@@ -58,8 +58,8 @@ public class HomeService {
         return homeMapper.selectListViewedProduct(product_number_arr);
     }
 
-    public List<HashMap> selectListWishedProduct(int page, String email) throws Exception {
-        return homeMapper.selectListWishedProduct(page, email);
+    public List<HashMap> selectListWishedProduct(HashMap<String, Object> paramMap) throws Exception {
+        return homeMapper.selectListWishedProduct(paramMap);
     }
 
     public int insertAddWish(HashMap<String, Object> paramMap) throws Exception {
