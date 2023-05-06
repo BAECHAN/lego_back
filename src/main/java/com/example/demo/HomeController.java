@@ -200,18 +200,18 @@ public class HomeController {
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-//    @PostMapping("/get-user-info")
-//    public ResponseEntity getUserInfo(@RequestBody HashMap<String,Object> paramMap) throws Exception{
-//        HashMap<String,Object> resultMap = new HashMap<String, Object>();
-//
-//        UserVO userInfo = service.selectUserInfo(paramMap);
-//
-//        if(userInfo != null){
-//            resultMap.put("result",userInfo);
-//        }
-//
-//        return new ResponseEntity(resultMap, HttpStatus.OK);
-//    }
+    @PostMapping("/get-user-info")
+    public ResponseEntity getUserInfo(@RequestBody HashMap<String,Object> paramMap) throws Exception{
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
+        UserVO userInfo = service.selectUserInfo(paramMap);
+
+        if(userInfo != null){
+            resultMap.put("result",userInfo);
+        }
+
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+    }
 
     @PostMapping("/get-user-info-oauth")
     public ResponseEntity getUserInfoOAuth(@RequestBody HashMap<String,Object> paramMap) throws Exception{
