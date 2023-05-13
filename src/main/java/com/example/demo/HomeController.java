@@ -298,13 +298,12 @@ public class HomeController {
         }
     }
 
-    @GetMapping("/product-cart-list")
-    public ResponseEntity getProductCartList(@RequestParam(value= "page", required=true) int page,
-                                             @RequestParam(value= "email", required = true) String email) throws Exception {
+    @PostMapping("/product-cart-list")
+    public ResponseEntity getProductCartList(@RequestBody HashMap<String,Object> paramMap) throws Exception {
 
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        List<HashMap> cartList = service.selectListCartProduct(page, email);
+        List<HashMap> cartList = service.selectListCartProduct(paramMap);
 
         resultMap.put("cartList",cartList);
 
@@ -360,18 +359,8 @@ public class HomeController {
 
     @PatchMapping("/upd-shipping-priority")
     public ResponseEntity updateShippingPriority(@RequestBody HashMap<String,Object> paramMap)throws Exception {
-
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-
-        int result = service.updateShippingPriority(paramMap);
-
-        if(result == 1){
-            resultMap.put("result",result);
-        }else{
-            resultMap.put("result",0);
-        }
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        service.updateShippingPriority(paramMap);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/shipping-list")
@@ -422,22 +411,12 @@ public class HomeController {
 
     @PostMapping("/add-order")
     public ResponseEntity addOrder(@RequestBody HashMap<String,Object> paramMap)throws Exception {
-
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-
-        int result = service.saveOrder(paramMap);
-
-        resultMap.put("result",result);
-
-        if(result != 1){
-            System.err.println("결제 데이터 반입 에러 번호 : " + result);
-        }
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        service.saveOrder(paramMap);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/order-list")
-    public ResponseEntity getOrderList(@RequestParam HashMap<String,Object> paramMap)throws Exception {
+    @PostMapping("/order-list")
+    public ResponseEntity getOrderList(@RequestBody HashMap<String,Object> paramMap)throws Exception {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
@@ -462,20 +441,7 @@ public class HomeController {
 
     @PatchMapping("/upd-order-refund")
     public ResponseEntity updateOrderRefund(@RequestBody HashMap<String,Object> paramMap)throws Exception {
-
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-
-
-
-        int result = service.orderRefund(paramMap);
-
-        if(result > 0){
-            resultMap.put("result",result);
-        }else{
-            resultMap.put("result",0);
-        }
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        service.orderRefund(paramMap);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }
