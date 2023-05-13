@@ -122,8 +122,8 @@ public class HomeService {
         return homeMapper.insertAddCart(paramMap);
     }
 
-    public List<HashMap> selectListCartProduct(int page, String email) throws Exception {
-        return homeMapper.selectListCartProduct(page, email);
+    public List<HashMap> selectListCartProduct(HashMap<String, Object> paramMap) throws Exception {
+        return homeMapper.selectListCartProduct(paramMap);
     }
 
     public int updateDelCart(HashMap<String, Object> paramMap) throws Exception {
@@ -305,13 +305,12 @@ public class HomeService {
         return homeMapper.updateUserImage(email, savedPath);
     }
 
-    public int updateShippingPriority(HashMap<String, Object> paramMap) throws Exception {
-        return homeMapper.updateShippingPriority(paramMap);
+    public void updateShippingPriority(HashMap<String, Object> paramMap) throws Exception {
+        homeMapper.updateShippingPriority(paramMap);
     }
 
     @Transactional
-    public int saveOrder(HashMap<String, Object> paramMap) throws Exception {
-        System.err.println(paramMap);
+    public void saveOrder(HashMap<String, Object> paramMap) throws Exception {
 
         ArrayList<HashMap<String, Object>> cartInfo = (ArrayList<HashMap<String, Object>>) paramMap.get("cart_info");
 
@@ -341,18 +340,17 @@ public class HomeService {
                     if(isUpdateDelCarts > 0){
                         System.err.println("주문완료 된 상품들은 장바구니에서 제외되었습니다.");
                         System.out.println("완료됨");
-                        return 1;
                     }else{
-                        return 904; // 장바구니에서 상품을 제외하는 쿼리 실행 시 문제 발생
+                        // 장바구니에서 상품을 제외하는 쿼리 실행 시 문제 발생
                     }
                 }else{
-                    return 903; // 상품별 주문 정보를 등록하는 쿼리 실행 시 문제 발생
+                    // 상품별 주문 정보를 등록하는 쿼리 실행 시 문제 발생
                 }
             }else{
-                return 902; // 주문 그룹을 등록하는 쿼리 실행 시 문제 발생
+                // 주문 그룹을 등록하는 쿼리 실행 시 문제 발생
             }
         } else {
-            return 901; // 배송 요청 사항 변경 쿼리 실행 시 문제 발생
+            // 배송 요청 사항 변경 쿼리 실행 시 문제 발생
         }
     }
 
@@ -389,7 +387,7 @@ public class HomeService {
     }
 
     @Transactional
-    public int orderRefund(HashMap<String, Object> paramMap) throws Exception {
+    public void orderRefund(HashMap<String, Object> paramMap) throws Exception {
 
         // 1. 환불요청
         int isRefund = updateOrderRefund(paramMap);
@@ -411,15 +409,14 @@ public class HomeService {
                 if (isCartRollback > 0) {
                     System.err.println("장바구니 rollback 완료");
                     System.err.println("성공적");
-                    return 1;
                 } else {
-                    return 908; // 장바구니에서 제외한 주문 상품들을 다시 장바구니에 담는 쿼리 실행 시 문제 발생
+                    // 장바구니에서 제외한 주문 상품들을 다시 장바구니에 담는 쿼리 실행 시 문제 발생
                 }
             }else{
-                return 907; // 주문했던 상품 정보를 가져오는 쿼리 실행 시 문제 발생
+                // 주문했던 상품 정보를 가져오는 쿼리 실행 시 문제 발생
             }
         }else{
-            return 906; // 환불 처리하는 쿼리 실행 시 문제 발생
+            // 환불 처리하는 쿼리 실행 시 문제 발생
         }
     }
 
