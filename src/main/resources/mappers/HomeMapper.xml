@@ -347,7 +347,7 @@
         <!-- selectLoginChk -->
         <include refid="selectUserInfoSQL" />
         WHERE EMAIL = #{email}
-        AND PASSWORD = #{password}
+        AND PASSWORD = #{pw}
     </select>
 
     <insert id="insertAccount" parameterType="java.util.HashMap">
@@ -422,8 +422,8 @@
         where email = #{email} and product_id = #{product_id}
     </update>
 
-    <insert id="createToken" parameterType="java.util.HashMap">
-        <!-- createToken -->
+    <insert id="insertToken" parameterType="java.util.HashMap">
+        <!-- insertToken -->
         insert into user_token (email,token)
             select email,#{token} as token
             from user
@@ -435,14 +435,18 @@
         <!-- selectTokenChk -->
         select email, token, date_created &lt; DATE_SUB(NOW(), INTERVAL 1 hour) as expired
         from user_token
-        where email = #{email} and token = #{token}
+        where token = #{token}
     </select>
 
     <update id="updatePassword" parameterType="java.util.HashMap">
         <!-- updatePassword -->
         update user
         set password = #{pw}, LAST_UPDATED = now()
-        where email = #{email}
+        where email = (
+            select email
+            from user_token
+            where token = #{token}
+        )
     </update>
 
 

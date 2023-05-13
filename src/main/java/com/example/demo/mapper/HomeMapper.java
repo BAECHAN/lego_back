@@ -19,7 +19,7 @@ public interface HomeMapper {
 
     ProductVO selectProductInfo(int product_number) throws Exception;
 
-    int insertAccount(HashMap<String, Object> paramMap) throws Exception;
+    void insertAccount(HashMap<String, Object> paramMap) throws Exception;
 
     UserVO selectLoginChk(HashMap<String, Object> paramMap) throws Exception;
 
@@ -29,11 +29,11 @@ public interface HomeMapper {
 
     List<HashMap> selectListWishedProduct(HashMap<String, Object> paramMap) throws Exception;
 
-    int insertAddWish(HashMap<String, Object> paramMap) throws Exception;
+    void insertAddWish(HashMap<String, Object> paramMap) throws Exception;
 
-    int updateDelWish(HashMap<String, Object> paramMap) throws Exception;
+    void updateDelWish(HashMap<String, Object> paramMap) throws Exception;
 
-    int createToken(HashMap<String, Object> paramMap) throws Exception;
+    int insertToken(HashMap<String, Object> paramMap) throws Exception;
 
     TokenVO selectTokenChk(HashMap<String, Object> paramMap) throws Exception;
 
@@ -53,17 +53,17 @@ public interface HomeMapper {
 
     UserVO selectUserInfo(HashMap<String, Object> paramMap) throws Exception;
 
-    int updateWakeupAccount(HashMap<String, Object> paramMap) throws Exception;
+    void updateWakeupAccount(HashMap<String, Object> paramMap) throws Exception;
 
-    int updateUserInfo(HashMap<String, Object> paramMap) throws Exception;
+    void updateUserInfo(HashMap<String, Object> paramMap) throws Exception;
 
     UserVO selectNameChk(HashMap<String, Object> paramMap) throws Exception;
 
-    int updateWithdrawAccount(HashMap<String, Object> paramMap) throws Exception;
+    void updateWithdrawAccount(HashMap<String, Object> paramMap) throws Exception;
 
-    int insertShipping(HashMap<String, Object> paramMap) throws Exception;
+    void insertShipping(HashMap<String, Object> paramMap) throws Exception;
 
-    int updateShipping(HashMap<String, Object> paramMap) throws Exception;;
+    void updateShipping(HashMap<String, Object> paramMap) throws Exception;;
 
     List<ShippingVO> selectListShipping(HashMap<String, Object> paramMap) throws Exception;
 
