@@ -26,7 +26,6 @@ public class HomeController {
 
     @GetMapping("/theme-list")
     public ResponseEntity getThemeList() throws Exception {
-
         List<ThemeVO> themeList = service.selectListTheme();
         return new ResponseEntity(themeList, HttpStatus.OK);
     }
@@ -68,14 +67,8 @@ public class HomeController {
 
     @GetMapping("/product-filter")
     public ResponseEntity getProductFilter(@RequestParam(value= "theme_id", required=true) int theme_id) throws Exception {
-
-        HashMap<String,Object> resultMap = new HashMap<String, Object>();
-
         List<HashMap> productFilter = service.selectListProductFilter(theme_id);
-
-        resultMap.put("productFilter",productFilter);
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        return new ResponseEntity(productFilter, HttpStatus.OK);
     }
 
 
@@ -87,6 +80,7 @@ public class HomeController {
         ProductVO productInfo = service.selectProductInfo(product_number);
 
         String[] dtl_img_list;
+
         if(productInfo.getDtl_img_list() != null){
             dtl_img_list = productInfo.getDtl_img_list().split(",");
             resultMap.put("product_img_list",dtl_img_list);
@@ -99,74 +93,57 @@ public class HomeController {
 
     @PostMapping("/email-chk")
     public ResponseEntity getEmailChk(@RequestBody HashMap<String,Object> paramMap) throws Exception{
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
         Optional<UserVO> userInfo = Optional.ofNullable(service.selectUserInfo(paramMap));
 
         if(userInfo.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            resultMap.put("isOverlap", true);
             // 이메일 중복
         }else{
-            return ResponseEntity.status(HttpStatus.OK).build();
+            resultMap.put("isOverlap", false);
             // 이메일 사용 가능
         }
+        return new ResponseEntity(resultMap, HttpStatus.OK);
+
     }
 
     @PostMapping("/nickname-chk")
     public ResponseEntity getNicknameChk(@RequestBody HashMap<String,Object> paramMap) throws Exception{
+
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        UserVO userInfo = service.selectNameChk(paramMap);
+        Optional<UserVO> userInfo = Optional.ofNullable(service.selectNameChk(paramMap));
 
-        if(userInfo != null){
-            resultMap.put("result",userInfo.getAccount_state());
+        if(userInfo.isPresent()){
+            resultMap.put("isOverlap", true);
+            // 닉네임 중복
         }else{
-            resultMap.put("result",0);
+            resultMap.put("isOverlap", false);
+            // 닉네임 사용 가능
         }
-
         return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
     @PostMapping("/upd-nickname")
     public ResponseEntity updateNicknameAfterCheck(@RequestBody HashMap<String,Object> paramMap) throws Exception{
-        HashMap<String,Object> resultMap = new HashMap<String, Object>();
-
-        UserVO userInfo = service.selectNameChk(paramMap);
-
-        if(userInfo != null){
-            resultMap.put("result",userInfo.getAccount_state());
-        }else{
-            int isUpdate = service.updateUserInfo(paramMap);
-
-            if(isUpdate > 0){
-                resultMap.put("result",0);
-            }else {
-                resultMap.put("result", -1);
-            }
-        }
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        service.updateUserInfo(paramMap);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/create-account")
     public ResponseEntity createAccount(@RequestBody HashMap<String,Object> paramMap) throws Exception{
-        HashMap<String,Object> resultMap = new HashMap<String, Object>();
-
-        int result = service.insertAccount(paramMap);
-
-        if(result == 1){
-            resultMap.put("result",result);
-        }
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        service.saveAccount(paramMap);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/login-chk")
     public ResponseEntity getLoginChk(@RequestBody HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        UserVO userInfo = service.selectLoginChk(paramMap);
+        Optional<UserVO> userInfo = Optional.ofNullable(service.selectLoginChk(paramMap));
 
-        if(userInfo != null){
+        if(userInfo.isPresent()){
             resultMap.put("result",userInfo);
         }
 
@@ -177,59 +154,36 @@ public class HomeController {
     public ResponseEntity getPasswordChkReturnToken(@RequestBody HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        UserVO userInfo = service.selectLoginChk(paramMap);
+        Optional<UserVO> userInfo = Optional.ofNullable(service.selectLoginChk(paramMap));
 
-        if(userInfo != null){
-            String randomStr = "";
-            randomStr = service.getToken(paramMap);
+        if(userInfo.isPresent()){
+            String randomStr = service.createToken(paramMap);
 
             paramMap.put("token",randomStr);
-            int result  = service.createToken(paramMap);
+
+            int result = service.insertToken(paramMap);
 
             if(result > 0){
-                resultMap.put("result",1);
                 resultMap.put("token", randomStr);
-            }else{
-                resultMap.put("result",-1);
+                return new ResponseEntity(resultMap, HttpStatus.OK);
+            }else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
-
-        }else{
-            resultMap.put("result",0);
+        }else {
+            return new ResponseEntity(resultMap, HttpStatus.OK);
         }
 
-        return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
     @PostMapping("/get-user-info")
     public ResponseEntity getUserInfo(@RequestBody HashMap<String,Object> paramMap) throws Exception{
-        HashMap<String,Object> resultMap = new HashMap<String, Object>();
-
-        UserVO userInfo = service.selectUserInfo(paramMap);
-
-        if(userInfo != null){
-            resultMap.put("result",userInfo);
-        }
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        Optional<UserVO> userInfo = Optional.ofNullable(service.selectUserInfo(paramMap));
+        return new ResponseEntity(userInfo, HttpStatus.OK);
     }
 
     @PostMapping("/get-user-info-oauth")
     public ResponseEntity getUserInfoOAuth(@RequestBody HashMap<String,Object> paramMap) throws Exception{
-        HashMap<String,Object> resultMap = new HashMap<String, Object>();
-
-        int result = service.selectUserUpdateConnect(paramMap);
-
-        if(result == 200){
-            return new ResponseEntity(resultMap, HttpStatus.OK);
-        }else if(result == 201) {
-            return new ResponseEntity(resultMap,HttpStatus.CREATED);
-
-        }else if(result == 500) {
-            resultMap.put("result","server-error");
-            return new ResponseEntity(resultMap, HttpStatus.OK);
-        }else {
-            return new ResponseEntity(resultMap, HttpStatus.NO_CONTENT);
-        }
+        return service.selectUserUpdateConnect(paramMap);
     }
 
     @PatchMapping("/upd-user-oauth")
@@ -251,8 +205,9 @@ public class HomeController {
     public ResponseEntity getThemeByProduct(@RequestParam(value= "product_number", required=true) int product_number) throws Exception {
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        ThemeVO themeInfo = service.selectThemeByProduct(product_number);
-        if(themeInfo != null){
+        Optional<ThemeVO> themeInfo = Optional.ofNullable(service.selectThemeByProduct(product_number));
+
+        if(themeInfo.isPresent()){
             resultMap.put("result",themeInfo);
         }
 
@@ -277,7 +232,6 @@ public class HomeController {
 
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
-        System.err.println(paramMap);
         List<HashMap> wishList = service.selectListWishedProduct(paramMap);
 
         resultMap.put("wishList",wishList);
@@ -287,53 +241,37 @@ public class HomeController {
 
     @PostMapping("/add-wish")
     public ResponseEntity addWish(@RequestBody HashMap<String,Object> paramMap)throws Exception {
-
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-
-        int result = service.insertAddWish(paramMap);
-
-        if(result > 0){
-            resultMap.put("result",result);
-        }
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        service.insertAddWish(paramMap);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping("/del-wish")
     public ResponseEntity delWish(@RequestBody HashMap<String,Object> paramMap)throws Exception {
+        service.updateDelWish(paramMap);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-
-        int result = service.updateDelWish(paramMap);
-
-        if(result > 0){
-            resultMap.put("result",result);
-        }
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
-    @PostMapping("/get-token")
+    @PostMapping("/create-token")
     public ResponseEntity gettingToken(@RequestBody HashMap<String,Object> paramMap)throws Exception {
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
-        String randomStr = "";
-
-        randomStr = service.getToken(paramMap);
+        String randomStr = service.createToken(paramMap);
 
         paramMap.put("token",randomStr);
-        int result  = service.createToken(paramMap);
+
+        int result  = service.insertToken(paramMap);
 
         if(result > 0){
             resultMap.put("token", randomStr);
         }
 
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        return new ResponseEntity(resultMap, HttpStatus.CREATED);
     }
 
-    @GetMapping("/token-chk")
-    public ResponseEntity passwordTokenCheck(@RequestParam HashMap<String,Object> paramMap) throws Exception{
+    @PostMapping("/token-chk")
+    public ResponseEntity passwordTokenCheck(@RequestBody HashMap<String,Object> paramMap) throws Exception{
         HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
         TokenVO tokenResult = service.selectTokenChk(paramMap);
@@ -345,31 +283,19 @@ public class HomeController {
 
     @PatchMapping("/update-password")
     public ResponseEntity updatePassword(@RequestBody HashMap<String,Object> paramMap) throws Exception{
-        HashMap<String,Object> resultMap = new HashMap<String, Object>();
-
-        System.out.println("paramMap = " + paramMap);
-
-        int result = service.updatePassword(paramMap);
-
-        System.out.println(result);
-        if(result > 0){
-            resultMap.put("result",result);
-        }
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        service.updatePassword(paramMap);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/add-cart")
     public ResponseEntity addCart(@RequestBody HashMap<String,Object> paramMap)throws Exception {
-
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-
         int result = service.addCart(paramMap);
-        System.err.println(result);
-        if(result > 0){
-            resultMap.put("result",result);
+
+        if(result == 0){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }else {
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
-        return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
     @GetMapping("/product-cart-list")
@@ -387,84 +313,49 @@ public class HomeController {
 
     @PatchMapping("/del-cart")
     public ResponseEntity delCart(@RequestBody HashMap<String,Object> paramMap)throws Exception {
-
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-
         int result = service.delCart(paramMap);
 
-        if(result == 1){
-            resultMap.put("result",result);
-            resultMap.put("cartId",paramMap.get("cart_id"));
-        }else{
-            resultMap.put("result",0);
+        if(result == 0){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
-        return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
     @PatchMapping("/upd-cart")
     public ResponseEntity updateCart(@RequestBody HashMap<String,Object> paramMap)throws Exception {
 
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-
-        System.err.println(paramMap);
-
         int result = service.updateQuantity(paramMap);
 
-        resultMap.put("result",result);
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        if(result == 0){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
     }
     @PatchMapping("/wakeup-account")
     public ResponseEntity updateWakeupAccount(@RequestBody HashMap<String,Object> paramMap)throws Exception {
-
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-
-        int result = service.updateWakeupAccount(paramMap);
-
-        resultMap.put("result",result);
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        service.updateWakeupAccount(paramMap);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("/withdraw-account")
     public ResponseEntity updateWithdrawAccount(@RequestBody HashMap<String,Object> paramMap)throws Exception {
-
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-
-        int result = service.updateWithdrawAccount(paramMap);
-
-        resultMap.put("result",result);
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        service.updateWithdrawAccount(paramMap);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/manage-shipping")
     public ResponseEntity addShipping(@RequestBody HashMap<String,Object> paramMap)throws Exception {
-
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-
-        int result = service.manageShipping(paramMap);
-
-        resultMap.put("result", result);
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        service.manageShipping(paramMap);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("/del-shipping")
     public ResponseEntity delShipping(@RequestBody HashMap<String,Object> paramMap)throws Exception {
-
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-
-        int result = service.updateDelShipping(paramMap);
-
-        if(result == 1){
-            resultMap.put("result",result);
-        }else{
-            resultMap.put("result",0);
-        }
-
-        return new ResponseEntity(resultMap, HttpStatus.OK);
+        service.updateDelShipping(paramMap);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("/upd-shipping-priority")

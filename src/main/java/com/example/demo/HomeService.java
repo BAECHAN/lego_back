@@ -3,6 +3,8 @@ package com.example.demo;
 import com.example.demo.mapper.HomeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,8 +43,8 @@ public class HomeService {
         return homeMapper.selectProductInfo(product_number);
     }
 
-    public int insertAccount(HashMap<String, Object> paramMap) throws Exception {
-        return homeMapper.insertAccount(paramMap);
+    public void saveAccount(HashMap<String, Object> paramMap) throws Exception{
+        homeMapper.insertAccount(paramMap);
     }
 
     public UserVO selectLoginChk(HashMap<String, Object> paramMap) throws Exception {
@@ -62,16 +64,16 @@ public class HomeService {
         return homeMapper.selectListWishedProduct(paramMap);
     }
 
-    public int insertAddWish(HashMap<String, Object> paramMap) throws Exception {
-        return homeMapper.insertAddWish(paramMap);
+    public void insertAddWish(HashMap<String, Object> paramMap) throws Exception {
+        homeMapper.insertAddWish(paramMap);
     }
 
-    public int updateDelWish(HashMap<String, Object> paramMap) throws Exception {
-        return homeMapper.updateDelWish(paramMap);
+    public void updateDelWish(HashMap<String, Object> paramMap) throws Exception {
+        homeMapper.updateDelWish(paramMap);
     }
 
-    public int createToken(HashMap<String, Object> paramMap) throws Exception {
-        return homeMapper.createToken(paramMap);
+    public int insertToken(HashMap<String, Object> paramMap) throws Exception {
+        return homeMapper.insertToken(paramMap);
     }
 
     public TokenVO selectTokenChk(HashMap<String, Object> paramMap) throws Exception {
@@ -95,12 +97,10 @@ public class HomeService {
         if(isAdd > 0){
             System.err.println("상품을 카트에 담았습니다.");
             paramMap.put("state", "add");
-            int isUpdateProduct = updateCommitProduct(paramMap);
-
-            return isUpdateProduct;
+            return updateCommitProduct(paramMap);
 
         }else{
-            return 900; // 상품을 카트에 추가하는 쿼리 실행 시 문제 발생
+            return 0; // 상품을 카트에 추가하는 쿼리 실행 시 문제 발생
         }
     }
 
@@ -113,11 +113,9 @@ public class HomeService {
         if(isDel > 0){
             System.err.println("상품을 카트에서 제거하였습니다.");
             paramMap.put("state", "del");
-            int isUpdateProduct = updateCommitProduct(paramMap);
-
-            return isUpdateProduct;
+            return updateCommitProduct(paramMap);
         }else{
-            return 900;
+            return 0;
         }
     }
     public int insertAddCart(HashMap<String, Object> paramMap) throws Exception {
@@ -159,7 +157,7 @@ public class HomeService {
             }
         } catch (Exception e){
             e.printStackTrace();
-            return 900; // 장바구니 수량 변경 쿼리 실행 시 문제 발생
+            return 0; // 장바구니 수량 변경 쿼리 실행 시 문제 발생
         }
     }
 
@@ -171,12 +169,12 @@ public class HomeService {
         return homeMapper.selectUserInfo(paramMap);
     }
 
-    public int updateWakeupAccount(HashMap<String, Object> paramMap) throws Exception {
-        return homeMapper.updateWakeupAccount(paramMap);
+    public void updateWakeupAccount(HashMap<String, Object> paramMap) throws Exception {
+        homeMapper.updateWakeupAccount(paramMap);
     }
 
-    public int updateUserInfo(HashMap<String, Object> paramMap) throws Exception {
-        return homeMapper.updateUserInfo(paramMap);
+    public void updateUserInfo(HashMap<String, Object> paramMap) throws Exception {
+        homeMapper.updateUserInfo(paramMap);
     }
 
     public UserVO selectNameChk(HashMap<String, Object> paramMap) throws Exception {
@@ -224,7 +222,7 @@ public class HomeService {
         }
     }
 
-    public String getToken(HashMap<String, Object> paramMap) throws Exception {
+    public String createToken(HashMap<String, Object> paramMap) throws Exception {
         int randomStrLen = 20;
         Random random = new Random();
         StringBuffer randomBuf = new StringBuffer();
@@ -246,28 +244,22 @@ public class HomeService {
         return randomStr;
     }
 
-    public int updateWithdrawAccount(HashMap<String, Object> paramMap) throws Exception {
-        return homeMapper.updateWithdrawAccount(paramMap);
+    public void updateWithdrawAccount(HashMap<String, Object> paramMap) throws Exception {
+        homeMapper.updateWithdrawAccount(paramMap);
     }
 
     @Transactional
-    public int manageShipping(HashMap<String, Object> paramMap) throws Exception {
-
-
-        int isResetShippingDefault = 0;
-        int changeShipping = 0;
+    public void manageShipping(HashMap<String, Object> paramMap) throws Exception {
 
         if (paramMap.get("shippingDefault").toString() == "true") {
             homeMapper.resetShippingDefault(paramMap);
         }
 
         if (Integer.parseInt(paramMap.get("shippingId").toString()) == 0) {
-            changeShipping = homeMapper.insertShipping(paramMap);
+            homeMapper.insertShipping(paramMap);
         } else {
-            changeShipping = homeMapper.updateShipping(paramMap);
+            homeMapper.updateShipping(paramMap);
         }
-
-        return changeShipping;
     }
 
     public List<ShippingVO> selectListShipping(HashMap<String, Object> paramMap) throws Exception {
@@ -444,24 +436,23 @@ public class HomeService {
     }
 
     @Transactional
-    public int selectUserUpdateConnect(HashMap<String, Object> paramMap) throws Exception{
+    public ResponseEntity selectUserUpdateConnect(HashMap<String, Object> paramMap) throws Exception{
 
         UserVO userInfo = selectUserInfo(paramMap);
+
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
+
         if (userInfo != null){
             if(userInfo.getOauth_connect() != null){
-                return 200;
+                resultMap.put("isConnectedOauth",true);
+                return new ResponseEntity(resultMap,HttpStatus.OK);
             }else{
-                try {
-                    updateUserOauth(paramMap);
-                    return 201;
-
-                } catch(SQLException sqle){
-                    sqle.printStackTrace();
-                    return 500;
-                }
+                updateUserOauth(paramMap);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
-        }else{
-            return 204;
+        } else {
+            resultMap.put("isConnectedOauth",false);
+            return new ResponseEntity(resultMap,HttpStatus.UNAUTHORIZED);
         }
     }
 }
