@@ -34,3 +34,4 @@ build/
 
 ### env ###
 application-db.properties
+application.properties
