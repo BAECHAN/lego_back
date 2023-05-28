@@ -175,13 +175,13 @@ public class HomeController {
 
     }
 
-    @PostMapping("/get-user-info")
+    @PostMapping("/user-info")
     public ResponseEntity getUserInfo(@RequestBody HashMap<String,Object> paramMap) throws Exception{
         Optional<UserVO> userInfo = Optional.ofNullable(service.selectUserInfo(paramMap));
         return new ResponseEntity(userInfo, HttpStatus.OK);
     }
 
-    @PostMapping("/get-user-info-oauth")
+    @PostMapping("/user-info-oauth")
     public ResponseEntity getUserInfoOAuth(@RequestBody HashMap<String,Object> paramMap) throws Exception{
         return service.selectUserUpdateConnect(paramMap);
     }
