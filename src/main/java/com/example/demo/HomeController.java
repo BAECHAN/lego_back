@@ -172,7 +172,6 @@ public class HomeController {
         }else {
             return new ResponseEntity(resultMap, HttpStatus.OK);
         }
-
     }
 
     @PostMapping("/user-info")
