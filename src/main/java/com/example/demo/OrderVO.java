@@ -23,4 +23,6 @@ public class OrderVO {
     private String shipping_address2;       // 상세주소
     private String delivery_request;        // 배송요청사항
     private String delivery_request_direct; // 배송요청사항 - 직접입력
+    private int total_price;                // 전체 결제액
+    private int product_count;              // 주문한 상품 항목 수
 }
