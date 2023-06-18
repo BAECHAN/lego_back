@@ -711,8 +711,8 @@
 
     <insert id="insertOrderGroup" parameterType="java.util.HashMap">
         <!-- insertOrderGroup -->
-        insert into user_order_group (email, shipping_id, state, date_registed, date_updated)
-        values (#{email}, #{shipping_id}, 2, now(), now())
+        insert into user_order_group (email, shipping_id, state, date_registed, date_updated, total_price,product_count)
+        values (#{email}, #{shipping_id}, 2, now(), now(), #{total_price},#{product_count})
     </insert>
 
     <insert id="insertOrderItem" parameterType="java.util.HashMap">
@@ -755,7 +755,9 @@
             d.shipping_address1,
             d.shipping_address2,
             d.delivery_request,
-            d.delivery_request_direct
+            d.delivery_request_direct,
+            a.total_price,
+            a.product_count
 
         from user_order_group a
              inner join user_order_item b
