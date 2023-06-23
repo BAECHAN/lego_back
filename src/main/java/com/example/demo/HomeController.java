@@ -429,17 +429,19 @@ public class HomeController {
 
         List<Integer> orderGroupIds = new ArrayList<>();
 
-        for (OrderVO orderGroup : orderGroupList) {
-            orderGroupIds.add(orderGroup.getOrder_group_id());
-        }
+        if(orderGroupList.size() > 0){
+            for (OrderVO orderGroup : orderGroupList) {
+                orderGroupIds.add(orderGroup.getOrder_group_id());
+            }
 
-        List<OrderVO> orderList = service.selectListOrderItems(orderGroupIds);
+            List<OrderVO> orderList = service.selectListOrderItems(orderGroupIds);
+            resultMap.put("orderList",orderList);
+        }
 
         if(orderGroupList.size() < take){
             resultMap.put("isLast",true);
         }
 
-        resultMap.put("orderList",orderList);
         resultMap.put("orderGroupList",orderGroupList);
 
         return new ResponseEntity(resultMap, HttpStatus.OK);
