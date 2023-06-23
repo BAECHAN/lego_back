@@ -85,11 +85,12 @@ public interface HomeMapper {
 
     int insertOrderItem(HashMap<String, Object> paramMap) throws Exception;
 
-    List<OrderVO> selectListOrderItems(String email, int offset, int take) throws Exception;
+    List<OrderVO> selectListOrderItems(List<Integer> orderGroupIds) throws Exception;
 
-    int selectCountOrderItems(String email) throws Exception;
+    List<OrderVO> selectListOrderGroups(String email, int offset, int take) throws Exception;
 
     int updateOrderRefund(HashMap<String, Object> paramMap) throws Exception;
+
     ArrayList<HashMap<String,Object>> selectListOrderQuantity(HashMap<String, Object> paramMap) throws Exception;
 
     int updateNoStockProduct(HashMap<String, Object> paramMap) throws Exception;
