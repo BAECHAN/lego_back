@@ -374,12 +374,12 @@ public class HomeService {
         return homeMapper.insertOrderItem(paramMap);
     }
 
-    public int selectCountOrderItems(String email) throws Exception {
-        return homeMapper.selectCountOrderItems(email);
+    public List<OrderVO> selectListOrderItems(List<Integer> orderGroupIds) throws Exception{
+        return homeMapper.selectListOrderItems(orderGroupIds);
     }
 
-    public List<OrderVO> selectListOrderItems(String email, int offset, int take) throws Exception{
-        return homeMapper.selectListOrderItems(email,offset,take);
+    public List<OrderVO> selectListOrderGroups(String email, int offset, int take) throws Exception{
+        return homeMapper.selectListOrderGroups(email,offset,take);
     }
 
     public int updateOrderRefund(HashMap<String, Object> paramMap) throws Exception{

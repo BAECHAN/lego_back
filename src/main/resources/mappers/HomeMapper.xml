@@ -767,19 +767,36 @@
              inner join user_shipping d
                         on a.shipping_id = d.shipping_id
 
+        where a.order_group_id in
+        <foreach collection="orderGroupIds" item="orderGroupId" open="(" separator="," close=")">
+            #{orderGroupId}
+        </foreach>
+        order by a.order_group_id desc, c.product_id
+    </select>
+
+    <select id="selectListOrderGroups" parameterType="java.util.HashMap" resultType="com.example.demo.OrderVO">
+        <!-- selectListOrderGroups -->
+        select
+        a.order_group_id,
+        a.state,
+        a.date_registed,
+        d.recipient,
+        d.tel_number,
+        d.shipping_address1,
+        d.shipping_address2,
+        d.delivery_request,
+        d.delivery_request_direct,
+        a.total_price,
+        a.product_count
+
+        from user_order_group a
+        inner join user_shipping d
+        on a.shipping_id = d.shipping_id
+
         where a.email = #{email}
 
         order by a.date_registed desc
         limit #{offset} ,#{take}
-    </select>
-
-    <select id="selectCountOrderItems" parameterType="java.util.HashMap" resultType="int">
-        <!-- selectCountOrderItems -->
-        select count(1)
-        from user_order_group a
-        inner join user_order_item b
-        on a.order_group_id = b.order_group_id
-        where a.email = #{email}
     </select>
 
     <update id="updateOrderRefund" parameterType="java.util.HashMap">
