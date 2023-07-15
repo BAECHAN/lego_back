@@ -400,7 +400,7 @@
         where b.sale_enabled > 0
         and c.email = #{email}
         and c.wish = 1
-        order by c.date_registed desc
+        order by c.date_updated desc
     </select>
 
     <insert id="insertAddWish" parameterType="java.util.HashMap">
