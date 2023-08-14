@@ -452,4 +452,8 @@ public class HomeService {
             return new ResponseEntity(resultMap,HttpStatus.UNAUTHORIZED);
         }
     }
+
+    public int selectOrderGroupsTotalCount(String email) throws Exception{
+        return homeMapper.selectOrderGroupsTotalCount(email);
+    }
 }

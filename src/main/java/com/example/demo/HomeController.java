@@ -426,6 +426,7 @@ public class HomeController {
         int offset = page * take;
 
         List<OrderVO> orderGroupList = service.selectListOrderGroups(email,offset,take);
+        int orderGroupListTotalCount = service.selectOrderGroupsTotalCount(email);
 
         List<Integer> orderGroupIds = new ArrayList<>();
 
@@ -438,7 +439,7 @@ public class HomeController {
             resultMap.put("orderList",orderList);
         }
 
-        if(orderGroupList.size() < take){
+        if(orderGroupList.size() < take || orderGroupListTotalCount == take * page){
             resultMap.put("isLast",true);
         }
 

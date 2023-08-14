@@ -799,6 +799,14 @@
         limit #{offset} ,#{take}
     </select>
 
+    <select id="selectOrderGroupsTotalCount" parameterType="string" resultType="int">
+        select count(1)
+        from user_order_group a
+        inner join user_shipping d
+        on a.shipping_id = d.shipping_id
+        where a.email = #{email}
+    </select>
+
     <update id="updateOrderRefund" parameterType="java.util.HashMap">
         <!-- updateOrderRefund -->
         update user_order_group
