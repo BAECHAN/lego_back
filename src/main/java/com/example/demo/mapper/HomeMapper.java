@@ -100,4 +100,6 @@ public interface HomeMapper {
     int updateQuantityProduct(HashMap<String, Object> paramMap) throws Exception;
 
     int updateUserOauth(HashMap<String, Object> paramMap) throws Exception;
+
+    int selectOrderGroupsTotalCount(String email) throws Exception;
 }
